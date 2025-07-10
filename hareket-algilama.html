@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çiftlik İmparatorluğu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Baloo 2', cursive; 
+            touch-action: manipulation; 
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .game-container { 
+            width: 100%; 
+            max-width: 95vw; 
+            max-height: 95vh; 
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        canvas { 
+            background: linear-gradient(45deg, #86efac 0%, #78c078 50%, #65a65e 100%); 
+            border-radius: 1rem; 
+            border: 6px solid #8B5A2B; 
+            width: 100%; 
+            height: auto; 
+            aspect-ratio: 20 / 15; 
+            box-shadow: 
+                inset 0 0 20px rgba(0,0,0,0.2),
+                0 15px 35px rgba(0,0,0,0.3),
+                0 5px 15px rgba(0,0,0,0.2);
+        }
+        .control-button, .action-button { 
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%; 
+            background: linear-gradient(145deg, #fbbf24, #f59e0b);
+            border: 3px solid #d97706; 
+            box-shadow: 
+                0 8px 15px rgba(0,0,0,0.3),
+                inset 0 2px 4px rgba(255,255,255,0.3);
+            transition: all 0.2s ease-in-out; 
+            user-select: none; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .control-button:before, .action-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        .control-button:hover:before, .action-button:hover:before {
+            left: 100%;
+        }
+        .control-button:active, .action-button:active { 
+            transform: translateY(3px) scale(0.92); 
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.3),
+                inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .modal { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px);
+        }
+        .modal-enter {
+            animation: modalEnter 0.3s ease-out;
+        }
+        @keyframes modalEnter {
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .stats-panel {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        .message-glow {
+            animation: messageGlow 2s ease-in-out;
+        }
+        @keyframes messageGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.6); }
+        }
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .helper-path {
+            stroke: rgba(255, 255, 0, 0.5);
+            stroke-width: 2;
+            stroke-dasharray: 5, 5;
+            fill: none;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+
+    <!-- BAŞLANGIÇ EKRANI -->
+    <div id="start-screen" class="w-full h-full flex flex-col items-center justify-center text-white text-center p-4 bg-cover bg-center relative" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI4MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDgwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iODAwIiBmaWxsPSIjMjJjNTVlIi8+Cjwvc3ZnPgo=');">
+        <div class="floating-animation">
+            <h1 class="text-4xl md:text-7xl font-bold mb-8 text-yellow-300 drop-shadow-lg" style="text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;">
+                🌾 Çiftlik İmparatorluğu 🌾
+            </h1>
+        </div>
+        <p class="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl">
+            Hayvanlara bakın, ürün toplayın, para kazanın ve çiftliğinizi büyütün!
+        </p>
+        <button id="play-btn" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-lg text-2xl border-b-4 border-green-700 hover:border-green-800 shadow-lg transform hover:scale-105 transition-all duration-200 animate-pulse">
+            🎮 Oyuna Başla
+        </button>
+    </div>
+
+    <!-- OYUN EKRANI -->
+    <div id="game-container" class="game-container text-white rounded-2xl shadow-2xl p-4 flex-col gap-3 hidden">
+        <!-- İstatistikler -->
+        <div class="stats-panel grid grid-cols-3 md:grid-cols-6 gap-2 text-center p-3 rounded-lg text-sm md:text-base">
+            <div class="flex items-center justify-center gap-1">
+                <span class="text-yellow-400">💰</span>
+                <span id="money" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🥛</span>
+                <span id="milk" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🥚</span>
+                <span id="egg" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🪵</span>
+                <span id="wood" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🌾</span>
+                <span id="wheat" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🥡</span>
+                <span id="flour" class="font-bold">0</span>
+            </div>
+        </div>
+
+        <!-- Mesaj Kutusu -->
+        <div id="message-box" class="h-12 bg-black/40 rounded-lg flex items-center justify-center p-3 text-center text-yellow-200 font-semibold border border-gray-600"></div>
+
+        <!-- Oyun Alanı -->
+        <div class="flex-grow flex items-center justify-center">
+            <canvas id="game-canvas"></canvas>
+        </div>
+
+        <!-- Kontroller ve Butonlar -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <!-- Hareket Kontrolleri -->
+            <div class="grid grid-cols-3 gap-2 w-48">
+                <div></div>
+                <button id="up-btn" class="control-button">⬆️</button>
+                <div></div>
+                <button id="left-btn" class="control-button">⬅️</button>
+                <button id="down-btn" class="control-button">⬇️</button>
+                <button id="right-btn" class="control-button">➡️</button>
+            </div>
+
+            <!-- Aksiyon Butonları -->
+            <div class="flex items-center gap-3">
+                <button id="hire-helper-btn" class="action-button bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700" title="Yardımcı Kirala">
+                    🧑‍🔧
+                </button>
+                <button id="market-btn" class="action-button bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700" title="Pazar">
+                    🛒
+                </button>
+                <button id="info-btn" class="action-button bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700" title="Bilgi">
+                    ℹ️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALLAR -->
+    <div id="modal-backdrop" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 invisible opacity-0">
+        <div id="modal-content" class="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-slate-600 rounded-xl p-6 max-w-sm w-full text-white shadow-2xl modal-enter">
+            <h2 id="modal-title" class="text-2xl font-bold mb-4 text-yellow-300 text-center"></h2>
+            <div id="modal-body" class="space-y-3 max-h-96 overflow-y-auto"></div>
+            <button id="modal-close-btn" class="mt-6 w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200">
+                ❌ Kapat
+            </button>
+        </div>
+    </div>
+    
+    <script>
+    // --- GLOBAL DEĞİŞKENLER ---
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    const BOARD_WIDTH = 20, BOARD_HEIGHT = 15, TILE_SIZE = 50;
+    canvas.width = BOARD_WIDTH * TILE_SIZE;
+    canvas.height = BOARD_HEIGHT * TILE_SIZE;
+
+    const moneyEl = document.getElementById('money');
+    const milkEl = document.getElementById('milk');
+    const eggEl = document.getElementById('egg');
+    const woodEl = document.getElementById('wood');
+    const wheatEl = document.getElementById('wheat');
+    const flourEl = document.getElementById('flour');
+    const messageBox = document.getElementById('message-box');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    
+    let gameState = {};
+    let sounds = {};
+    let audioStarted = false;
+    const keys = { up: { pressed: false }, down: { pressed: false }, left: { pressed: false }, right: { pressed: false } };
+
+    const COOLDOWNS = { milk: 8 * 60, egg: 6 * 60, wheat: 10 * 60, wood: 25 * 60 };
+    const PROCESS_TIMES = { flour: 4 * 60, bread: 6 * 60 };
+    const ITEM_PRICES = { milk: 12, egg: 8, wood: 15, wheat: 6, flour: 18, bread: 35 };
+    const COSTS = {
+        helpers: { 
+            milk: 120, egg: 180, wood: 300, miller: 450, 
+            baker: 600, collector: 400, seller: 800 
+        },
+        upgrades: { 
+            cow: 250, chicken: 200, wheat: 150, oven: 400, tree: 180 
+        },
+        buildings: { 
+            marketStall: 1200, mill: 1000 
+        }
+    };
+    const ITEM_EMOJIS = { milk: '🥛', egg: '🥚', wood: '🪵', wheat: '🌾', flour: '🥡', bread: '🍞' };
+    const toPixels = (gridPos) => ({ x: gridPos.x * TILE_SIZE + TILE_SIZE / 2, y: gridPos.y * TILE_SIZE + TILE_SIZE / 2 });
+
+    // --- SES FONKSİYONLARI ---
+    function initializeSounds() { 
+        if (typeof Tone === 'undefined') { 
+            console.error("Tone.js kütüphanesi yüklenemedi."); 
+            return; 
+        } 
+        sounds = { 
+            synth: new Tone.Synth({
+                oscillator: { type: 'sine' },
+                envelope: { attack: 0.1, decay: 0.2, sustain: 0.3, release: 0.5 }
+            }).toDestination(),
+            collect: new Tone.Synth({ 
+                oscillator: { type: 'triangle' }, 
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.1 } 
+            }).toDestination(), 
+            sale: new Tone.Synth({ 
+                oscillator: { type: 'sine' }, 
+                envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.2 } 
+            }).toDestination(), 
+            error: new Tone.Synth({ 
+                oscillator: { type: 'square' }, 
+                envelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.2 } 
+            }).toDestination(), 
+            background: new Tone.MembraneSynth().toDestination() 
+        }; 
+    }
+    
+    function playSound(type, note, duration = '8n') { 
+        if (!audioStarted || !sounds[type]) return; 
+        try { 
+            sounds[type].triggerAttackRelease(note, duration); 
+        } catch (e) { 
+            console.error("Ses çalınamadı:", e); 
+        } 
+    }
+
+    // --- İYİLEŞTİRİLMİŞ ÇİZİM FONKSİYONLARI ---
+    function drawWithShadow(drawFunc, shadowColor = 'rgba(0, 0, 0, 0.3)', blur = 8, offsetX = 4, offsetY = 4) { 
+        ctx.shadowColor = shadowColor; 
+        ctx.shadowBlur = blur; 
+        ctx.shadowOffsetX = offsetX; 
+        ctx.shadowOffsetY = offsetY; 
+        drawFunc(); 
+        ctx.shadowColor = 'transparent'; 
+        ctx.shadowBlur = 0; 
+        ctx.shadowOffsetX = 0; 
+        ctx.shadowOffsetY = 0; 
+    }
+    
+    function drawPlayer(ctx, pos) { 
+        drawWithShadow(() => { 
+            // Kafa
+            ctx.fillStyle = '#ffc0cb'; 
+            ctx.beginPath(); 
+            ctx.arc(pos.x, pos.y - 15, 15, 0, Math.PI * 2); 
+            ctx.fill(); 
+            
+            // Saç
+            ctx.fillStyle = '#654321';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y - 20, 18, Math.PI, 2 * Math.PI);
+            ctx.fill();
+            
+            // Vücut
+            ctx.fillStyle = '#800080'; 
+            ctx.fillRect(pos.x - 12, pos.y, 24, 30);
+            
+            // Kollar
+            ctx.fillStyle = '#e0ac69';
+            ctx.fillRect(pos.x - 18, pos.y + 5, 8, 20);
+            ctx.fillRect(pos.x + 10, pos.y + 5, 8, 20);
+            
+            // Ayaklar
+            ctx.fillStyle = '#000080';
+            ctx.fillRect(pos.x - 10, pos.y + 28, 8, 12);
+            ctx.fillRect(pos.x + 2, pos.y + 28, 8, 12);
+        }); 
+    }
+    
+    function drawHelper(ctx, pos, type, hasItem) { 
+        drawWithShadow(() => { 
+            const colors = {
+                milk: '#00FFFF', 
+                egg: '#fde047', 
+                wood: '#a3e635', 
+                miller: '#facc15', 
+                baker: '#fb923c', 
+                collector: '#fca5a5', 
+                seller: '#90EE90'
+            };
+            
+            // Robot vücut
+            ctx.fillStyle = '#C0C0C0'; 
+            ctx.fillRect(pos.x - 10, pos.y - 5, 20, 25);
+            
+            // Robot kafa
+            ctx.fillStyle = colors[type] || '#A9A9A9';
+            ctx.beginPath(); 
+            ctx.arc(pos.x, pos.y - 15, 12, 0, Math.PI * 2); 
+            ctx.fill(); 
+            
+            // Göz
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y - 15, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Kollar
+            ctx.fillStyle = '#C0C0C0';
+            ctx.fillRect(pos.x - 15, pos.y - 2, 8, 15);
+            ctx.fillRect(pos.x + 7, pos.y - 2, 8, 15);
+            
+            // Ayaklar
+            ctx.fillRect(pos.x - 8, pos.y + 18, 6, 10);
+            ctx.fillRect(pos.x + 2, pos.y + 18, 6, 10);
+            
+            // Eşya taşıyor ise göster
+            if(hasItem) { 
+                ctx.font = '16px sans-serif'; 
+                const itemEmoji = {
+                    milk: '🥛', egg: '🥚', wood: '🪵', 
+                    miller: '🌾', baker: '🥡', collector: '🍞', seller: '💰'
+                }[type] || '❔'; 
+                ctx.fillText(itemEmoji, pos.x + 18, pos.y - 5); 
+            } 
+        }); 
+    }
+    
+    function drawIndicator(ctx, pos, emoji) { 
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x, pos.y - 50, 20, 0, Math.PI * 2); 
+        ctx.fill(); 
+        
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.fillStyle = 'black'; 
+        ctx.font = '24px sans-serif';
+        ctx.textAlign = 'center'; 
+        ctx.textBaseline = 'middle'; 
+        ctx.fillText(emoji, pos.x, pos.y - 50); 
+    }
+    
+    function drawLevelIndicator(ctx, pos, level) { 
+        if (level <= 1) return; 
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.95)'; 
+        ctx.strokeStyle = 'rgba(180, 83, 9, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); 
+        ctx.arc(pos.x + 30, pos.y - 30, 15, 0, Math.PI * 2); 
+        ctx.fill(); 
+        ctx.stroke();
+        
+        ctx.fillStyle = 'black'; 
+        ctx.font = 'bold 16px Baloo 2'; 
+        ctx.textAlign = 'center'; 
+        ctx.textBaseline = 'middle'; 
+        ctx.fillText(`x${level}`, pos.x + 30, pos.y - 30); 
+    }
+    
+    function drawOrderBubble(ctx, pos, emoji) { 
+        const bubbleX = pos.x; 
+        const bubbleY = pos.y - 60; 
+        
+        // Konuşma balonu
+        ctx.fillStyle = 'white'; 
+        ctx.strokeStyle = 'black'; 
+        ctx.lineWidth = 3; 
+        ctx.beginPath(); 
+        ctx.roundRect(bubbleX - 25, bubbleY - 25, 50, 50, 15); 
+        ctx.fill(); 
+        ctx.stroke(); 
+        
+        // Kuyruk
+        ctx.beginPath(); 
+        ctx.moveTo(bubbleX, bubbleY + 25); 
+        ctx.lineTo(bubbleX - 8, bubbleY + 35); 
+        ctx.lineTo(bubbleX + 8, bubbleY + 35); 
+        ctx.closePath(); 
+        ctx.fill(); 
+        ctx.stroke(); 
+        
+        // Emoji
+        ctx.font = '32px sans-serif'; 
+        ctx.textAlign = 'center'; 
+        ctx.textBaseline = 'middle'; 
+        ctx.fillStyle = 'black'; 
+        ctx.fillText(emoji, bubbleX, bubbleY); 
+    }PI * 2); 
+            ctx.fill(); 
+            
+            // Şapka
+            ctx.fillStyle = '#8B4513'; 
+            ctx.fillRect(pos.x - 18, pos.y - 25, 36, 10); 
+            ctx.fillRect(pos.x - 10, pos.y - 35, 20, 12); 
+            
+            // Vücut
+            ctx.fillStyle = '#4682B4'; 
+            ctx.beginPath(); 
+            ctx.moveTo(pos.x - 12, pos.y); 
+            ctx.lineTo(pos.x + 12, pos.y); 
+            ctx.lineTo(pos.x + 18, pos.y + 30); 
+            ctx.lineTo(pos.x - 18, pos.y + 30); 
+            ctx.closePath(); 
+            ctx.fill(); 
+            
+            // Ayaklar
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(pos.x - 15, pos.y + 28, 12, 8);
+            ctx.fillRect(pos.x + 3, pos.y + 28, 12, 8);
+        }); 
+    }
+    
+    function drawCow(ctx, pos) { 
+        drawWithShadow(() => { 
+            // Vücut
+            ctx.fillStyle = 'white'; 
+            ctx.beginPath(); 
+            ctx.ellipse(pos.x, pos.y, 35, 25, 0, 0, Math.PI * 2); 
+            ctx.fill(); 
+            ctx.strokeStyle = 'black'; 
+            ctx.lineWidth = 2; 
+            ctx.stroke(); 
+            
+            // Benekler
+            ctx.fillStyle = 'black'; 
+            ctx.beginPath(); 
+            ctx.ellipse(pos.x - 20, pos.y - 8, 10, 6, -0.5, 0, Math.PI * 2); 
+            ctx.fill(); 
+            ctx.beginPath(); 
+            ctx.ellipse(pos.x + 15, pos.y + 10, 12, 8, 0.7, 0, Math.PI * 2); 
+            ctx.fill(); 
+            
+            // Kafa
+            ctx.fillStyle = 'white'; 
+            ctx.beginPath(); 
+            ctx.arc(pos.x + 30, pos.y - 15, 18, 0, Math.PI * 2); 
+            ctx.fill(); 
+            ctx.stroke(); 
+            
+            // Göz
+            ctx.fillStyle = 'black'; 
+            ctx.beginPath(); 
+            ctx.arc(pos.x + 35, pos.y - 18, 3, 0, Math.PI * 2); 
+            ctx.fill();
+            
+            // Boynuzlar
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(pos.x + 25, pos.y - 25);
+            ctx.lineTo(pos.x + 22, pos.y - 35);
+            ctx.moveTo(pos.x + 35, pos.y - 25);
+            ctx.lineTo(pos.x + 38, pos.y - 35);
+            ctx.stroke();
+        }); 
+    }
+    
+    function drawChicken(ctx, pos) { 
+        drawWithShadow(() => { 
+            // Vücut
+            ctx.fillStyle = '#FFFACD'; 
+            ctx.beginPath(); 
+            ctx.arc(pos.x, pos.y, 18, 0, Math.PI * 2); 
+            ctx.fill(); 
+            
+            // Kafa
+            ctx.beginPath(); 
+            ctx.arc(pos.x + 12, pos.y - 15, 10, 0, Math.PI * 2); 
+            ctx.fill(); 
+            
+            // Ibik
+            ctx.fillStyle = 'red'; 
+            ctx.beginPath(); 
+            ctx.moveTo(pos.x + 10, pos.y - 25); 
+            ctx.lineTo(pos.x + 14, pos.y - 30); 
+            ctx.lineTo(pos.x + 18, pos.y - 25); 
+            ctx.fill(); 
+            
+            // Gaga
+            ctx.fillStyle = 'orange'; 
+            ctx.beginPath(); 
+            ctx.moveTo(pos.x + 22, pos.y - 15); 
+            ctx.lineTo(pos.x + 28, pos.y - 12); 
+            ctx.lineTo(pos.x + 22, pos.y - 9); 
+            ctx.fill();
+            
+            // Ayaklar
+            ctx.strokeStyle = 'orange';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(pos.x - 5, pos.y + 18);
+            ctx.lineTo(pos.x - 5, pos.y + 25);
+            ctx.moveTo(pos.x + 5, pos.y + 18);
+            ctx.lineTo(pos.x + 5, pos.y + 25);
+            ctx.stroke();
+        }); 
+    }
+    
+    function drawWheatField(ctx, pos) { 
+        drawWithShadow(() => { 
+            // Zemin
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(pos.x - 25, pos.y - 20, 50, 40);
+            
+            // Buğday sapları
+            ctx.fillStyle = '#DAA520'; 
+            for(let i = -20; i < 25; i += 8) { 
+                for (let j = -15; j < 20; j += 10) { 
+                    ctx.fillRect(pos.x + i, pos.y + j, 3, 18); 
+                    // Başaklar
+                    ctx.fillStyle = '#f5deb3';
+                    ctx.fillRect(pos.x + i - 1, pos.y + j - 5, 5, 8);
+                    ctx.fillStyle = '#DAA520';
+                } 
+            } 
+        }); 
+    }
+    
+    function drawTree(ctx, pos) { 
+        drawWithShadow(() => { 
+            // Gövde
+            ctx.fillStyle = '#8B4513'; 
+            ctx.fillRect(pos.x - 8, pos.y - 25, 16, 50); 
+            
+            // Yapraklar (3 katman)
+            ctx.fillStyle = '#228B22'; 
+            ctx.beginPath(); 
+            ctx.arc(pos.x, pos.y - 35, 30, 0, Math.PI * 2); 
+            ctx.fill(); 
+            
+            ctx.fillStyle = '#32CD32'; 
+            ctx.beginPath(); 
+            ctx.arc(pos.x + 12, pos.y - 45, 25, 0, Math.PI * 2); 
+            ctx.fill(); 
+            
+            ctx.fillStyle = '#3CB371'; 
+            ctx.beginPath(); 
+            ctx.arc(pos.x - 10, pos.y - 50, 22, 0, Math.PI * 2); 
+            ctx.fill();
+        }); 
+    }
+    
+    function drawMill(ctx, pos, angle) { 
+        drawWithShadow(() => { 
+            // Bina
+            ctx.fillStyle = '#D2B48C'; 
+            ctx.beginPath(); 
+            ctx.moveTo(pos.x - 25, pos.y + 35); 
+            ctx.lineTo(pos.x - 30, pos.y - 25); 
+            ctx.lineTo(pos.x + 30, pos.y - 25); 
+            ctx.lineTo(pos.x + 25, pos.y + 35); 
+            ctx.closePath(); 
+            ctx.fill(); 
+            
+            // Çatı
+            ctx.fillStyle = '#A0522D'; 
+            ctx.beginPath(); 
+            ctx.arc(pos.x, pos.y - 25, 30, 0, Math.PI, true); 
+            ctx.fill(); 
+            
+            // Kapı
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(pos.x - 10, pos.y + 15, 20, 20);
+            
+            // Pervane
+            ctx.save(); 
+            ctx.translate(pos.x, pos.y - 20); 
+            ctx.rotate(angle); 
+            ctx.fillStyle = '#8B4513'; 
+            ctx.fillRect(-8, -50, 16, 100); 
+            ctx.fillRect(-50, -8, 100, 16); 
+            ctx.restore(); 
+        }); 
+    }
+    
+    function drawOven(ctx, pos) { 
+        drawWithShadow(() => { 
+            // Ana yapı
+            ctx.fillStyle = '#A9A9A9'; 
+            ctx.fillRect(pos.x - 30, pos.y - 25, 60, 50); 
+            
+            // Baca
+            ctx.fillStyle = '#696969';
+            ctx.fillRect(pos.x - 5, pos.y - 45, 10, 20);
+            
+            // Çatı
+            ctx.fillStyle = '#8B4513'; 
+            ctx.fillRect(pos.x - 33, pos.y - 28, 66, 8); 
+            
+            // Fırın ağzı
+            ctx.fillStyle = 'black'; 
+            ctx.fillRect(pos.x - 18, pos.y - 5, 36, 20);
+            
+            // Duman efekti
+            if (gameState.locations && gameState.locations.oven && gameState.locations.oven.processing) {
+                ctx.fillStyle = 'rgba(200, 200, 200, 0.7)';
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath();
+                    ctx.arc(pos.x + (i * 8 - 8), pos.y - 50 - (i * 10), 5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }); 
+    }
+    
+    function drawSalesCounter(ctx, pos) { 
+        drawWithShadow(() => { 
+            // Tezgah
+            ctx.fillStyle = '#D2B48C'; 
+            ctx.fillRect(pos.x - 35, pos.y - 15, 70, 25); 
+            
+            // Tente
+            ctx.fillStyle = '#DC143C'; 
+            ctx.beginPath(); 
+            ctx.moveTo(pos.x - 40, pos.y - 30); 
+            ctx.lineTo(pos.x + 40, pos.y - 30); 
+            ctx.lineTo(pos.x + 35, pos.y - 15); 
+            ctx.lineTo(pos.x - 35, pos.y - 15); 
+            ctx.closePath(); 
+            ctx.fill();
+            
+            // Direkler
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(pos.x - 38, pos.y - 30, 6, 40);
+            ctx.fillRect(pos.x + 32, pos.y - 30, 6, 40);
+        }); 
+    }
+    
+    function drawStorageBox(ctx, pos) { 
+        drawWithShadow(() => { 
+            // Ana kutu
+            ctx.fillStyle = '#8B4513'; 
+            ctx.fillRect(pos.x - 25, pos.y - 20, 50, 40); 
+            
+            // Kenarlar
+            ctx.strokeStyle = '#5a2d0c'; 
+            ctx.lineWidth = 4; 
+            ctx.strokeRect(pos.x - 25, pos.y - 20, 50, 40); 
+            
+            // X işareti
+            ctx.beginPath(); 
+            ctx.moveTo(pos.x - 25, pos.y - 20); 
+            ctx.lineTo(pos.x + 25, pos.y + 20); 
+            ctx.moveTo(pos.x + 25, pos.y - 20);
+            ctx.lineTo(pos.x - 25, pos.y + 20);
+            ctx.stroke();
+            
+            // Kilit
+            // Kilit
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(pos.x - 5, pos.y - 25, 10, 8);
+            ctx.strokeStyle = '#DAA520';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(pos.x - 5, pos.y - 25, 10, 8);
+        }); 
+    }
+    
+    function drawCustomer(ctx, pos) { 
+        drawWithShadow(() => { 
+            // Kafa
+            ctx.fillStyle = '#e0ac69'; 
+            ctx.beginPath(); 
+            ctx.arc(pos.x, pos.y - 15, 15, 0, Math.PI * 2); 
+            ctx.fill(); 
+            
+            // Saç
+            ctx.fillStyle = '#654321';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y - 20, 18, Math.PI, 2 * Math.PI);
+            ctx.fill();
+            
+            // Vücut
+            ctx.fillStyle = '#800080'; 
+            ctx.fillRect(pos.x - 12, pos.y, 24, 30);
+            
+            // Kollar
+            ctx.fillStyle = '#e0ac69';
+            ctx.fillRect(pos.x - 18, pos.y + 5, 8, 20);
+            ctx.fillRect(pos.x + 10, pos.y + 5, 8, 20);
+            
+            // Ayaklar
+            ctx.fillStyle = '#000080';
+            ctx.fillRect(pos.x - 10, pos.y + 28, 8, 12);
+            ctx.fillRect(pos.x + 2, pos.y + 28, 8, 12);
+        }); 
+    }
+    
+    function drawHelper(ctx, pos, type, hasItem) { 
+        drawWithShadow(() => { 
+            const colors = {
+                milk: '#00FFFF', 
+                egg: '#fde047', 
+                wood: '#a3e635', 
+                miller: '#facc15', 
+                baker: '#fb923c', 
+                collector: '#fca5a5', 
+                seller: '#90EE90'
+            };
+            
+            // Robot vücut
+            ctx.fillStyle = '#C0C0C0'; 
+            ctx.fillRect(pos.x - 10, pos.y - 5, 20, 25);
+            
+            // Robot kafa
+            ctx.fillStyle = colors[type] || '#A9A9A9';
+            ctx.beginPath(); 
+            ctx.arc(pos.x, pos.y - 15, 12, 0, Math.PI * 2); 
+            ctx.fill(); 
+            
+            // Göz
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y - 15, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Kollar
+            ctx.fillStyle = '#C0C0C0';
+            ctx.fillRect(pos.x - 15, pos.y - 2, 8, 15);
+            ctx.fillRect(pos.x + 7, pos.y - 2, 8, 15);
+            
+            // Ayaklar
+            ctx.fillRect(pos.x - 8, pos.y + 18, 6, 10);
+            ctx.fillRect(pos.x + 2, pos.y + 18, 6, 10);
+            
+            // Eşya taşıyor ise göster
+            if(hasItem) { 
+                ctx.font = '16px sans-serif'; 
+                const itemEmoji = {
+                    milk: '🥛', egg: '🥚', wood: '🪵', 
+                    miller: '🌾', baker: '🥡', collector: '🍞', seller: '💰'
+                }[type] || '❔'; 
+                ctx.fillText(itemEmoji, pos.x + 18, pos.y - 5); 
+            } 
+        }); 
+    }
+    
+    function drawIndicator(ctx, pos, emoji) { 
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x, pos.y - 50, 20, 0, Math.PI * 2); 
+        ctx.fill(); 
+        
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.fillStyle = 'black'; 
+        ctx.font = '24px sans-serif';
+        ctx.textAlign = 'center'; 
+        ctx.textBaseline = 'middle'; 
+        ctx.fillText(emoji, pos.x, pos.y - 50); 
+    }
+    
+    function drawLevelIndicator(ctx, pos, level) { 
+        if (level <= 1) return; 
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.95)'; 
+        ctx.strokeStyle = 'rgba(180, 83, 9, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); 
+        ctx.arc(pos.x + 30, pos.y - 30, 15, 0, Math.PI * 2); 
+        ctx.fill(); 
+        ctx.stroke();
+        
+        ctx.fillStyle = 'black'; 
+        ctx.font = 'bold 16px Baloo 2'; 
+        ctx.textAlign = 'center'; 
+        ctx.textBaseline = 'middle'; 
+        ctx.fillText(`x${level}`, pos.x + 30, pos.y - 30); 
+    }
+    
+    function drawOrderBubble(ctx, pos, emoji) { 
+        const bubbleX = pos.x; 
+        const bubbleY = pos.y - 60; 
+        
+        // Konuşma balonu
+        ctx.fillStyle = 'white'; 
+        ctx.strokeStyle = 'black'; 
+        ctx.lineWidth = 3; 
+        ctx.beginPath(); 
+        ctx.roundRect(bubbleX - 25, bubbleY - 25, 50, 50, 15); 
+        ctx.fill(); 
+        ctx.stroke(); 
+        
+        // Kuyruk
+        ctx.beginPath(); 
+        ctx.moveTo(bubbleX, bubbleY + 25); 
+        ctx.lineTo(bubbleX - 8, bubbleY + 35); 
+        ctx.lineTo(bubbleX + 8, bubbleY + 35); 
+        ctx.closePath(); 
+        ctx.fill(); 
+        ctx.stroke(); 
+        
+        // Emoji
+        ctx.font = '32px sans-serif'; 
+        ctx.textAlign = 'center'; 
+        ctx.textBaseline = 'middle'; 
+        ctx.fillStyle = 'black'; 
+        ctx.fillText(emoji, bubbleX, bubbleY); 
+    }
+    
+    function drawBackground(ctx) { 
+        // Arkaplan gradyanı
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, '#86efac');
+        gradient.addColorStop(0.5, '#78c078');
+        gradient.addColorStop(1, '#65a65e');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height); 
+        
+        // Yol
+        ctx.fillStyle = '#D2B48C'; 
+        ctx.beginPath(); 
+        ctx.ellipse(canvas.width / 2, canvas.height, canvas.width * 0.9, canvas.height * 0.5, 0, 0, Math.PI * 2); 
+        ctx.fill();
+        
+        // Çiçekler ve detaylar
+        for (let i = 0; i < 8; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            ctx.fillStyle = ['#FF69B4', '#FFB6C1', '#FFA500', '#FFFF00'][Math.floor(Math.random() * 4)];
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    // --- YARDIMCI HAREKET SİSTEMİ (YENİDEN YAZILDI) ---
+    function distance(pos1, pos2) {
+        return Math.hypot(pos1.x - pos2.x, pos1.y - pos2.y);
+    }
+    
+    function moveTowards(entity, targetPos, speed = 2) {
+        const dist = distance(entity.pos, targetPos);
+        if (dist < speed) {
+            entity.pos.x = targetPos.x;
+            entity.pos.y = targetPos.y;
+            return true; // Hedefe ulaştı
+        }
+        
+        const angle = Math.atan2(targetPos.y - entity.pos.y, targetPos.x - entity.pos.x);
+        entity.pos.x += Math.cos(angle) * speed;
+        entity.pos.y += Math.sin(angle) * speed;
+        return false;
+    }
+
+    function findNearestAvailableSource(helper, sourceType) {
+        const sources = Object.values(gameState.locations).filter(loc => 
+            loc.type === sourceType && 
+            loc.owned && 
+            loc.ready && 
+            !loc.claimedBy
+        );
+        
+        if (sources.length === 0) return null;
+        
+        return sources.reduce((nearest, current) => {
+            const nearestDist = distance(helper.pos, nearest.pos);
+            const currentDist = distance(helper.pos, current.pos);
+            return currentDist < nearestDist ? current : nearest;
+        });
+    }
+
+    function updateHelper(helper) {
+        if (!helper.task) {
+            assignTask(helper);
+        }
+        
+        if (helper.task && helper.targetPos) {
+            if (moveTowards(helper, helper.targetPos, 2.5)) {
+                executeHelperTask(helper);
+            }
+        }
+    }
+
+    function assignTask(helper) {
+        const storagePos = gameState.locations.storageBox.pos;
+        
+        // Temel kaynak toplama işçileri
+        if (['milk', 'egg', 'wood', 'wheat'].includes(helper.type)) {
+            const sourceTypeMap = { milk: 'cow', egg: 'chicken', wood: 'tree', wheat: 'wheat' };
+            const source = findNearestAvailableSource(helper, sourceTypeMap[helper.type]);
+            
+            if (source) {
+                helper.task = 'collect';
+                helper.targetPos = source.pos;
+                helper.targetSource = source;
+                source.claimedBy = helper.id;
+                return;
+            }
+        }
+        
+        // Değirmenci
+        if (helper.type === 'miller') {
+            const mill = gameState.locations.mill;
+            if (mill.owned && !mill.processing && !mill.hasProduct && gameState.storage.wheat >= mill.level) {
+                helper.task = 'process_mill';
+                helper.targetPos = storagePos;
+                helper.targetMachine = mill;
+                return;
+            }
+        }
+        
+        // Fırıncı
+        if (helper.type === 'baker') {
+            const oven = gameState.locations.oven;
+            if (oven.owned && !oven.processing && !oven.hasProduct && gameState.storage.flour >= oven.level) {
+                helper.task = 'process_oven';
+                helper.targetPos = storagePos;
+                helper.targetMachine = oven;
+                return;
+            }
+        }
+        
+        // Toplayıcı
+        if (helper.type === 'collector') {
+            const readyMachines = Object.values(gameState.locations).filter(loc => 
+                (loc.type === 'mill' || loc.type === 'oven') && 
+                loc.owned && 
+                loc.hasProduct && 
+                !loc.claimedBy
+            );
+            
+            if (readyMachines.length > 0) {
+                const machine = readyMachines[0];
+                helper.task = 'collect_product';
+                helper.targetPos = machine.pos;
+                helper.targetMachine = machine;
+                machine.claimedBy = helper.id;
+                return;
+            }
+        }
+        
+        // Satıcı
+        if (helper.type === 'seller') {
+            const customers = [gameState.customer1, gameState.customer2].filter(c => 
+                c && gameState.storage[c.wants] > 0
+            );
+            
+            if (customers.length > 0) {
+                const customer = customers[0];
+                helper.task = 'sell';
+                helper.targetPos = storagePos;
+                helper.targetCustomer = customer;
+                helper.itemToSell = customer.wants;
+                return;
+            }
+        }
+    }
+
+    function executeHelperTask(helper) {
+        const storagePos = gameState.locations.storageBox.pos;
+        
+        switch (helper.task) {
+            case 'collect':
+                if (helper.targetSource && !helper.hasItem) {
+                    // Kaynaktan topla
+                    helper.targetSource.ready = false;
+                    helper.targetSource.cooldown = COOLDOWNS[helper.type];
+                    helper.targetSource.claimedBy = null;
+                    helper.hasItem = true;
+                    helper.targetPos = storagePos;
+                    helper.task = 'deliver';
+                }
+                break;
+                
+            case 'deliver':
+                if (helper.hasItem) {
+                    // Depoya teslim et
+                    gameState.storage[helper.type] += helper.targetSource.level;
+                    helper.hasItem = false;
+                    helper.task = null;
+                    helper.targetPos = null;
+                    helper.targetSource = null;
+                    showMessage(`${helper.type} toplandı!`, 'success');
+                    playSound('collect', 'E5');
+                }
+                break;
+                
+            case 'process_mill':
+                if (!helper.hasItem) {
+                    // Buğday al
+                    gameState.storage.wheat -= helper.targetMachine.level;
+                    helper.hasItem = true;
+                    helper.targetPos = helper.targetMachine.pos;
+                    helper.task = 'deliver_to_mill';
+                }
+                break;
+                
+            case 'deliver_to_mill':
+                if (helper.hasItem) {
+                    // Değirmene ver
+                    helper.targetMachine.processing = true;
+                    helper.targetMachine.timer = PROCESS_TIMES.flour;
+                    helper.hasItem = false;
+                    helper.task = null;
+                    helper.targetPos = null;
+                    helper.targetMachine = null;
+                    showMessage('Buğday işleniyor...', 'info');
+                }
+                break;
+                
+            case 'process_oven':
+                if (!helper.hasItem) {
+                    // Un al
+                    gameState.storage.flour -= helper.targetMachine.level;
+                    helper.hasItem = true;
+                    helper.targetPos = helper.targetMachine.pos;
+                    helper.task = 'deliver_to_oven';
+                }
+                break;
+                
+            case 'deliver_to_oven':
+                if (helper.hasItem) {
+                    // Fırına ver
+                    helper.targetMachine.processing = true;
+                    helper.targetMachine.timer = PROCESS_TIMES.bread;
+                    helper.hasItem = false;
+                    helper.task = null;
+                    helper.targetPos = null;
+                    helper.targetMachine = null;
+                    showMessage('Ekmek pişiyor...', 'info');
+                }
+                break;
+                
+            case 'collect_product':
+                if (!helper.hasItem) {
+                    // Ürünü al
+                    const product = helper.targetMachine.type === 'mill' ? 'flour' : 'bread';
+                    helper.targetMachine.hasProduct = false;
+                    helper.targetMachine.claimedBy = null;
+                    helper.hasItem = true;
+                    helper.targetPos = storagePos;
+                    helper.task = 'deliver_product';
+                    helper.productType = product;
+                }
+                break;
+                
+            case 'deliver_product':
+                if (helper.hasItem) {
+                    // Ürünü depoya koy
+                    gameState.storage[helper.productType] += helper.targetMachine.level;
+                    helper.hasItem = false;
+                    helper.task = null;
+                    helper.targetPos = null;
+                    helper.targetMachine = null;
+                    helper.productType = null;
+                    showMessage(`${helper.productType} depoya kondu!`, 'success');
+                    playSound('collect', 'G5');
+                }
+                break;
+                
+            case 'sell':
+                if (!helper.hasItem) {
+                    // Ürünü al
+                    gameState.storage[helper.itemToSell]--;
+                    helper.hasItem = true;
+                    helper.targetPos = helper.targetCustomer.pos;
+                    helper.task = 'deliver_to_customer';
+                }
+                break;
+                
+            case 'deliver_to_customer':
+                if (helper.hasItem) {
+                    // Müşteriye sat
+                    gameState.player.money += ITEM_PRICES[helper.itemToSell];
+                    helper.hasItem = false;
+                    helper.task = null;
+                    helper.targetPos = null;
+                    
+                    // Müşteriyi kaldır
+                    if (helper.targetCustomer === gameState.customer1) {
+                        gameState.customer1 = null;
+                    } else {
+                        gameState.customer2 = null;
+                    }
+                    
+                    helper.targetCustomer = null;
+                    helper.itemToSell = null;
+                    showMessage('Satış yapıldı!', 'success');
+                    playSound('sale', 'C5');
+                }
+                break;
+        }
+    }
+
+    // --- RENDER FONKSİYONU ---
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBackground(ctx);
+        
+        // Çizilecek nesneleri topla ve sırala
+        let objectsToDraw = [];
+        
+        // Lokasyonları ekle
+        Object.values(gameState.locations).forEach(loc => {
+            if (loc.owned) {
+                let drawFunc, indicator, angle;
+                
+                switch(loc.type) {
+                    case 'salesCounter': drawFunc = drawSalesCounter; break;
+                    case 'storageBox': drawFunc = drawStorageBox; break;
+                    case 'cow': drawFunc = drawCow; indicator = '🥛'; break;
+                    case 'chicken': drawFunc = drawChicken; indicator = '🥚'; break;
+                    case 'wheat': drawFunc = drawWheatField; indicator = '🌾'; break;
+                    case 'oven': drawFunc = drawOven; break;
+                    case 'tree': drawFunc = drawTree; indicator = '🪵'; break;
+                    case 'mill': drawFunc = drawMill; angle = gameState.millAngle; break;
+                }
+                
+                if (drawFunc) {
+                    objectsToDraw.push({
+                        draw: drawFunc,
+                        obj: loc,
+                        indicator: indicator,
+                        angle: angle,
+                        y: loc.pos.y
+                    });
+                }
+            }
+        });
+        
+        // Yardımcıları ekle
+        gameState.helpers.forEach(helper => {
+            objectsToDraw.push({
+                draw: drawHelper,
+                obj: helper,
+                y: helper.pos.y
+            });
+        });
+        
+        // Oyuncuyu ekle
+        objectsToDraw.push({
+            draw: drawPlayer,
+            obj: gameState.player,
+            y: gameState.player.pos.y
+        });
+        
+        // Müşterileri ekle
+        if (gameState.customer1) {
+            objectsToDraw.push({
+                draw: drawCustomer,
+                obj: gameState.customer1,
+                y: gameState.customer1.pos.y
+            });
+        }
+        if (gameState.customer2) {
+            objectsToDraw.push({
+                draw: drawCustomer,
+                obj: gameState.customer2,
+                y: gameState.customer2.pos.y
+            });
+        }
+        
+        // Y koordinatına göre sırala (derinlik illüzyonu)
+        objectsToDraw.sort((a, b) => a.y - b.y);
+        
+        // Çiz
+        objectsToDraw.forEach(({ draw, obj, indicator, angle }) => {
+            if (angle !== undefined) {
+                draw(ctx, obj.pos, angle);
+            } else {
+                draw(ctx, obj.pos, obj.type, obj.hasItem);
+            }
+            
+            if (indicator && obj.ready) {
+                drawIndicator(ctx, obj.pos, indicator);
+            }
+            
+            if (obj.level && obj.level > 1) {
+                drawLevelIndicator(ctx, obj.pos, obj.level);
+            }
+        });
+        
+        // Müşteri siparişlerini göster
+        if (gameState.customer1) {
+            drawOrderBubble(ctx, gameState.customer1.pos, ITEM_EMOJIS[gameState.customer1.wants]);
+        }
+        if (gameState.customer2) {
+            drawOrderBubble(ctx, gameState.customer2.pos, ITEM_EMOJIS[gameState.customer2.wants]);
+        }
+        
+        // Makine durumlarını göster
+        const oven = gameState.locations.oven;
+        if (oven.owned) {
+            if (oven.hasProduct) {
+                ctx.font = '30px sans-serif';
+                ctx.fillText('🍞', oven.pos.x, oven.pos.y);
+            } else if (oven.processing) {
+                ctx.font = '30px sans-serif';
+                ctx.fillText('♨️', oven.pos.x, oven.pos.y);
+            }
+        }
+        
+        const mill = gameState.locations.mill;
+        if (mill.owned) {
+            if (mill.hasProduct) {
+                ctx.font = '30px sans-serif';
+                ctx.fillText('🥡', mill.pos.x, mill.pos.y);
+            } else if (mill.processing) {
+                ctx.font = '30px sans-serif';
+                ctx.fillText('⚙️', mill.pos.x, mill.pos.y);
+            }
+        }
+        
+        // UI güncelleme
+        updateUI();
+    }
+
+    function updateUI() {
+        moneyEl.textContent = gameState.player.money;
+        milkEl.textContent = gameState.storage.milk;
+        eggEl.textContent = gameState.storage.egg;
+        woodEl.textContent = gameState.storage.wood;
+        wheatEl.textContent = gameState.storage.wheat;
+        flourEl.textContent = gameState.storage.flour;
+    }
+
+    // --- OYUN GÜNCELLEMESİ ---
+    function update() {
+        // Oyuncu hareketi
+        const speed = 4;
+        if (keys.up.pressed && gameState.player.pos.y > 25) gameState.player.pos.y -= speed;
+        if (keys.down.pressed && gameState.player.pos.y < canvas.height - 25) gameState.player.pos.y += speed;
+        if (keys.left.pressed && gameState.player.pos.x > 25) gameState.player.pos.x -= speed;
+        if (keys.right.pressed && gameState.player.pos.x < canvas.width - 25) gameState.player.pos.x += speed;
+        
+        // Etkileşim kontrolü
+        checkInteraction();
+        
+        // Cooldown güncelleme
+        Object.values(gameState.locations).forEach(loc => {
+            if (loc.owned && loc.cooldown > 0) {
+                loc.cooldown--;
+                if (loc.cooldown <= 0) {
+                    loc.ready = true;
+                }
+            }
+        });
+        
+        // Değirmen animasyonu
+        gameState.millAngle += 0.02;
+        
+        // Müşteri spawn sistemi
+        spawnCustomers();
+        
+        // Müşteri sabır sistemi
+        updateCustomerPatience();
+        
+        // Makine işleme
+        updateMachineProcessing();
+        
+        // Yardımcı güncelleme
+        gameState.helpers.forEach(updateHelper);
+    }
+
+    function spawnCustomers() {
+        // Müşteri 1
+        if (!gameState.customer1 && Math.random() < 0.008) {
+            let possibleWants = ['milk', 'egg', 'wood', 'wheat'];
+            if (gameState.locations.mill.owned) {
+                possibleWants.push('flour');
+                if (gameState.locations.oven.owned) {
+                    possibleWants.push('bread');
+                }
+            }
+            const randomWant = possibleWants[Math.floor(Math.random() * possibleWants.length)];
+            gameState.customer1 = {
+                pos: { x: gameState.locations.salesCounter1.pos.x, y: gameState.locations.salesCounter1.pos.y + 50 },
+                wants: randomWant,
+                patience: 180 * 60 // 3 dakika
+            };
+        }
+        
+        // Müşteri 2
+        if (gameState.locations.salesCounter2.owned && !gameState.customer2 && Math.random() < 0.006) {
+            let possibleWants = ['milk', 'egg', 'wood', 'wheat'];
+            if (gameState.locations.mill.owned) {
+                possibleWants.push('flour');
+                if (gameState.locations.oven.owned) {
+                    possibleWants.push('bread');
+                }
+            }
+            const randomWant = possibleWants[Math.floor(Math.random() * possibleWants.length)];
+            gameState.customer2 = {
+                pos: { x: gameState.locations.salesCounter2.pos.x, y: gameState.locations.salesCounter2.pos.y + 50 },
+                wants: randomWant,
+                patience: 180 * 60
+            };
+        }
+    }
+
+    function updateCustomerPatience() {
+        if (gameState.customer1) {
+            gameState.customer1.patience--;
+            if (gameState.customer1.patience <= 0) {
+                gameState.customer1 = null;
+                showMessage("Müşteri sabırsızlıktan gitti!", 'error');
+                playSound('error', 'C3');
+            }
+        }
+        
+        if (gameState.customer2) {
+            gameState.customer2.patience--;
+            if (gameState.customer2.patience <= 0) {
+                gameState.customer2 = null;
+                showMessage("Müşteri sabırsızlıktan gitti!", 'error');
+                playSound('error', 'C3');
+            }
+        }
+    }
+
+    function updateMachineProcessing() {
+        // Fırın
+        const oven = gameState.locations.oven;
+        if (oven.owned && oven.processing) {
+            oven.timer--;
+            if (oven.timer <= 0) {
+                oven.processing = false;
+                oven.hasProduct = true;
+                showMessage('Ekmek hazır!', 'success');
+                playSound('collect', 'G5');
+            }
+        }
+        
+        // Değirmen
+        const mill = gameState.locations.mill;
+        if (mill.owned && mill.processing) {
+            mill.timer--;
+            if (mill.timer <= 0) {
+                mill.processing = false;
+                mill.hasProduct = true;
+                showMessage('Un hazır!', 'success');
+                playSound('collect', 'G5');
+            }
+        }
+    }
+
+    function checkInteraction() {
+        const now = Date.now();
+        if (now - gameState.lastInteractionTime < 300) return;
+        
+        let interacted = false;
+        
+        // Kaynak toplama
+        Object.values(gameState.locations).forEach(loc => {
+            if (loc.owned && distance(gameState.player.pos, loc.pos) < 60) {
+                if (loc.ready && ['cow', 'chicken', 'wheat', 'tree'].includes(loc.type)) {
+                    const itemMap = { cow: 'milk', chicken: 'egg', wheat: 'wheat', tree: 'wood' };
+                    const itemType = itemMap[loc.type];
+                    
+                    gameState.storage[itemType] += loc.level;
+                    loc.ready = false;
+                    loc.cooldown = COOLDOWNS[itemType];
+                    
+                    showMessage(`${loc.level} ${itemType} topladın!`, 'success');
+                    playSound('collect', 'E5');
+                    interacted = true;
+                }
+                
+                // Makine etkileşimleri
+                if (loc.type === 'oven' || loc.type === 'mill') {
+                    if (loc.hasProduct) {
+                        const product = loc.type === 'oven' ? 'bread' : 'flour';
+                        gameState.storage[product] += loc.level;
+                        loc.hasProduct = false;
+                        showMessage(`${loc.level} ${product} depoya koydun!`, 'success');
+                        playSound('collect', 'G5');
+                        interacted = true;
+                    } else if (!loc.processing) {
+                        const input = loc.type === 'oven' ? 'flour' : 'wheat';
+                        if (gameState.storage[input] >= loc.level) {
+                            gameState.storage[input] -= loc.level;
+                            loc.processing = true;
+                            loc.timer = loc.type === 'oven' ? PROCESS_TIMES.bread : PROCESS_TIMES.flour;
+                            showMessage(`${input} işleniyor...`, 'info');
+                            interacted = true;
+                        } else {
+                            showMessage(`Yeterli ${input} yok!`, 'error');
+                            playSound('error', 'C3');
+                            interacted = true;
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Müşteri etkileşimi
+        // Müşteri etkileşimi
+        [gameState.customer1, gameState.customer2].forEach(customer => {
+            if (customer && distance(gameState.player.pos, customer.pos) < 60) {
+                const wants = customer.wants;
+                if (gameState.storage[wants] > 0) {
+                    gameState.storage[wants]--;
+                    gameState.player.money += ITEM_PRICES[wants];
+                    
+                    if (customer === gameState.customer1) {
+                        gameState.customer1 = null;
+                    } else {
+                        gameState.customer2 = null;
+                    }
+                    
+                    showMessage(`${ITEM_PRICES[wants]}💰 kazandın!`, 'success');
+                    playSound('sale', 'C5');
+                    interacted = true;
+                } else {
+                    showMessage(`${wants} yok!`, 'error');
+                    playSound('error', 'C3');
+                    interacted = true;
+                }
+            }
+        });
+        
+        if (interacted) {
+            gameState.lastInteractionTime = now;
+        }
+    }
+
+    // --- MODAL VE UI FONKSİYONLARI ---
+    function openModal(title, content) {
+        modalTitle.textContent = title;
+        modalBody.innerHTML = content;
+        modalBackdrop.classList.remove('invisible', 'opacity-0');
+        modalBackdrop.classList.add('modal-enter');
+        playSound('synth', 'C4');
+    }
+
+    function closeModal() {
+        modalBackdrop.classList.add('invisible', 'opacity-0');
+        modalBackdrop.classList.remove('modal-enter');
+    }
+
+    function setupModals() {
+        // Yardımcı kiralama
+        document.getElementById('hire-helper-btn').addEventListener('click', () => {
+            const content = `
+                <div class="space-y-2">
+                    <button class="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded-lg transition-colors" onclick="hireHelper('milk')">
+                        🥛 Sütçü Robot - ${COSTS.helpers.milk}💰
+                        <div class="text-sm opacity-75">Otomatik süt toplar</div>
+                    </button>
+                    <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-black p-3 rounded-lg transition-colors" onclick="hireHelper('egg')">
+                        🥚 Yumurtacı Robot - ${COSTS.helpers.egg}💰
+                        <div class="text-sm opacity-75">Otomatik yumurta toplar</div>
+                    </button>
+                    <button class="w-full bg-green-600 hover:bg-green-700 p-3 rounded-lg transition-colors" onclick="hireHelper('wood')">
+                        🪵 Oduncu Robot - ${COSTS.helpers.wood}💰
+                        <div class="text-sm opacity-75">Otomatik odun toplar</div>
+                    </button>
+                    <button class="w-full bg-yellow-600 hover:bg-yellow-700 p-3 rounded-lg transition-colors" onclick="hireHelper('wheat')">
+                        🌾 Çiftçi Robot - ${COSTS.helpers.wheat || 200}💰
+                        <div class="text-sm opacity-75">Otomatik buğday toplar</div>
+                    </button>
+                    <button class="w-full bg-amber-500 hover:bg-amber-600 p-3 rounded-lg transition-colors" onclick="hireHelper('miller')">
+                        ⚙️ Değirmenci Robot - ${COSTS.helpers.miller}💰
+                        <div class="text-sm opacity-75">Buğdayı una çevirir</div>
+                    </button>
+                    <button class="w-full bg-orange-500 hover:bg-orange-600 p-3 rounded-lg transition-colors" onclick="hireHelper('baker')">
+                        🍞 Fırıncı Robot - ${COSTS.helpers.baker}💰
+                        <div class="text-sm opacity-75">Unu ekmeğe çevirir</div>
+                    </button>
+                    <button class="w-full bg-pink-500 hover:bg-pink-600 p-3 rounded-lg transition-colors" onclick="hireHelper('collector')">
+                        🤖 Toplayıcı Robot - ${COSTS.helpers.collector}💰
+                        <div class="text-sm opacity-75">İşlenmiş ürünleri toplar</div>
+                    </button>
+                    <button class="w-full bg-emerald-500 hover:bg-emerald-600 p-3 rounded-lg transition-colors" onclick="hireHelper('seller')">
+                        💰 Satıcı Robot - ${COSTS.helpers.seller}💰
+                        <div class="text-sm opacity-75">Müşterilere otomatik satış yapar</div>
+                    </button>
+                </div>
+                <div class="mt-4 p-3 bg-blue-900/50 rounded-lg text-sm">
+                    <p class="text-blue-200">💡 <strong>İpucu:</strong> Robotlar otomatik çalışır ve verimliliği artırır!</p>
+                </div>
+            `;
+            openModal('🤖 Robot İşçi Kirala', content);
+        });
+
+        // Pazar yeri
+        document.getElementById('market-btn').addEventListener('click', () => {
+            let content = '<div class="space-y-2">';
+            
+            // Yükseltmeler
+            const upgradables = {
+                cow: { name: '🐄 İnek Ahırı', desc: 'Daha fazla süt üretir' },
+                chicken: { name: '🐔 Kümes', desc: 'Daha fazla yumurta üretir' },
+                wheat: { name: '🌾 Tarla', desc: 'Daha fazla buğday üretir' },
+                oven: { name: '🔥 Fırın', desc: 'Daha fazla ekmek pişirir' },
+                tree: { name: '🌳 Orman', desc: 'Daha fazla odun üretir' }
+            };
+            
+            content += '<h3 class="text-lg font-bold text-yellow-300 mb-3">📈 Yükseltmeler</h3>';
+            
+            for (const [key, info] of Object.entries(upgradables)) {
+                const loc = gameState.locations[key];
+                if (loc && loc.owned) {
+                    const cost = COSTS.upgrades[key] * loc.level;
+                    const canAfford = gameState.player.money >= cost;
+                    const buttonClass = canAfford ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-600 cursor-not-allowed';
+                    
+                    content += `
+                        <button class="w-full ${buttonClass} p-3 rounded-lg transition-colors text-left" 
+                                onclick="${canAfford ? `purchaseUpgrade('${key}')` : 'void(0)'}"
+                                ${!canAfford ? 'disabled' : ''}>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="font-semibold">${info.name}</div>
+                                    <div class="text-sm opacity-75">${info.desc}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold">Lv.${loc.level} → ${loc.level + 1}</div>
+                                    <div class="text-sm">${cost}💰</div>
+                                </div>
+                            </div>
+                        </button>
+                    `;
+                }
+            }
+            
+            content += '<hr class="my-4 border-slate-600">';
+            content += '<h3 class="text-lg font-bold text-yellow-300 mb-3">🏗️ Yeni Binalar</h3>';
+            
+            // Yeni binalar
+            if (!gameState.locations.mill.owned) {
+                const canAfford = gameState.player.money >= COSTS.buildings.mill;
+                const buttonClass = canAfford ? 'bg-stone-600 hover:bg-stone-700' : 'bg-gray-600 cursor-not-allowed';
+                
+                content += `
+                    <button class="w-full ${buttonClass} p-3 rounded-lg transition-colors" 
+                            onclick="${canAfford ? `purchaseBuilding('mill')` : 'void(0)'}"
+                            ${!canAfford ? 'disabled' : ''}>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-semibold">⚙️ Değirmen</div>
+                                <div class="text-sm opacity-75">Buğdayı una çevirir</div>
+                            </div>
+                            <div class="font-bold">${COSTS.buildings.mill}💰</div>
+                        </div>
+                    </button>
+                `;
+            }
+            
+            if (!gameState.locations.salesCounter2.owned) {
+                const canAfford = gameState.player.money >= COSTS.buildings.marketStall;
+                const buttonClass = canAfford ? 'bg-stone-600 hover:bg-stone-700' : 'bg-gray-600 cursor-not-allowed';
+                
+                content += `
+                    <button class="w-full ${buttonClass} p-3 rounded-lg transition-colors" 
+                            onclick="${canAfford ? `purchaseBuilding('salesCounter2')` : 'void(0)'}"
+                            ${!canAfford ? 'disabled' : ''}>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-semibold">🛒 2. Satış Tezgahı</div>
+                                <div class="text-sm opacity-75">Daha fazla müşteri</div>
+                            </div>
+                            <div class="font-bold">${COSTS.buildings.marketStall}💰</div>
+                        </div>
+                    </button>
+                `;
+            }
+            
+            content += '</div>';
+            content += `
+                <div class="mt-4 p-3 bg-green-900/50 rounded-lg text-sm">
+                    <p class="text-green-200">💡 <strong>İpucu:</strong> Yükseltmeler üretimi artırır ve daha fazla kazanç sağlar!</p>
+                </div>
+            `;
+            
+            openModal('🛒 Pazar Yeri', content);
+        });
+
+        // Bilgi butonu
+        document.getElementById('info-btn').addEventListener('click', () => {
+            const helperCount = gameState.helpers.length;
+            const totalValue = Object.entries(gameState.storage).reduce((sum, [item, count]) => {
+                return sum + (count * ITEM_PRICES[item]);
+            }, 0);
+            
+            const totalAssets = gameState.player.money + totalValue;
+            const productivity = Object.values(gameState.locations)
+                .filter(loc => loc.owned && loc.level)
+                .reduce((sum, loc) => sum + loc.level, 0);
+            
+            const content = `
+                <div class="text-sm space-y-3">
+                    <div class="bg-slate-700 p-3 rounded-lg">
+                        <h3 class="font-bold text-yellow-300 mb-2">📊 İstatistikler</h3>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>💰 Para: ${gameState.player.money}</div>
+                            <div>🤖 Robot: ${helperCount}</div>
+                            <div>💎 Depo: ${totalValue}💰</div>
+                            <div>🏆 Toplam: ${totalAssets}💰</div>
+                            <div>⚡ Üretim: ${productivity}</div>
+                            <div>📈 Verimlilik: %${Math.min(100, productivity * 10)}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-700 p-3 rounded-lg">
+                        <h3 class="font-bold text-yellow-300 mb-2">🎮 Kontroller</h3>
+                        <div class="text-xs space-y-1">
+                            <p>• <strong>Hareket:</strong> Ok tuşları veya WASD</p>
+                            <p>• <strong>Toplama:</strong> Hayvanlara yaklaşın</p>
+                            <p>• <strong>Satış:</strong> Müşterilere yaklaşın</p>
+                            <p>• <strong>İşleme:</strong> Fırın/Değirmene yaklaşın</p>
+                            <p>• <strong>Robot:</strong> Otomatik çalışır</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-700 p-3 rounded-lg">
+                        <h3 class="font-bold text-yellow-300 mb-2">💰 Fiyat Listesi</h3>
+                        <div class="grid grid-cols-2 gap-1 text-xs">
+                            <div>🥛 Süt: ${ITEM_PRICES.milk}💰</div>
+                            <div>🥚 Yumurta: ${ITEM_PRICES.egg}💰</div>
+                            <div>🪵 Odun: ${ITEM_PRICES.wood}💰</div>
+                            <div>🌾 Buğday: ${ITEM_PRICES.wheat}💰</div>
+                            <div>🥡 Un: ${ITEM_PRICES.flour}💰</div>
+                            <div>🍞 Ekmek: ${ITEM_PRICES.bread}💰</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-700 p-3 rounded-lg">
+                        <h3 class="font-bold text-yellow-300 mb-2">🎯 Strateji İpuçları</h3>
+                        <div class="text-xs space-y-1">
+                            <p>• Önce temel robotları kiralayın</p>
+                            <p>• Değirmen ve fırın açın</p>
+                            <p>• Ekmek en karlı üründür</p>
+                            <p>• Yükseltmeler verimlilik artırır</p>
+                            <p>• Birden fazla tezgah açın</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-900/50 p-3 rounded-lg">
+                        <h3 class="font-bold text-blue-300 mb-2">🚀 Hedefler</h3>
+                        <div class="text-xs space-y-1">
+                            ${totalAssets < 5000 ? '<p>🎯 5,000💰 biriktirin</p>' : ''}
+                            ${helperCount < 5 ? '<p>🤖 5 robot kiralayın</p>' : ''}
+                            ${!gameState.locations.mill.owned ? '<p>⚙️ Değirmen inşa edin</p>' : ''}
+                            ${!gameState.locations.salesCounter2.owned ? '<p>🛒 2. tezgah açın</p>' : ''}
+                            ${productivity < 20 ? '<p>📈 Binalarınızı yükseltin</p>' : ''}
+                            ${totalAssets >= 10000 ? '<p>🏆 Çiftlik İmparatoru oldunuz!</p>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            openModal('ℹ️ Oyun Bilgileri', content);
+        });
+
+        // Modal kapatma
+        document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+        
+        // Modal dışına tıklama ile kapatma
+        modalBackdrop.addEventListener('click', (e) => {
+            if (e.target === modalBackdrop) {
+                closeModal();
+            }
+        });
+
+        // ESC tuşu ile kapatma
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modalBackdrop.classList.contains('invisible')) {
+                closeModal();
+            }
+        });
+    }
+
+    // Global fonksiyonlar (modal butonları için)
+    window.hireHelper = function(type) {
+        const cost = COSTS.helpers[type];
+        if (gameState.player.money >= cost) {
+            gameState.player.money -= cost;
+            
+            const newHelper = {
+                id: Date.now() + Math.random(),
+                type: type,
+                pos: { 
+                    x: gameState.locations.storageBox.pos.x + (Math.random() * 60 - 30), 
+                    y: gameState.locations.storageBox.pos.y + (Math.random() * 60 - 30)
+                },
+                task: null,
+                targetPos: null,
+                hasItem: false,
+                targetSource: null,
+                targetMachine: null,
+                targetCustomer: null,
+                itemToSell: null,
+                productType: null
+            };
+            
+            gameState.helpers.push(newHelper);
+            
+            const helperNames = {
+                milk: 'Sütçü Robot',
+                egg: 'Yumurtacı Robot', 
+                wood: 'Oduncu Robot',
+                wheat: 'Çiftçi Robot',
+                miller: 'Değirmenci Robot',
+                baker: 'Fırıncı Robot',
+                collector: 'Toplayıcı Robot',
+                seller: 'Satıcı Robot'
+            };
+            
+            showMessage(`${helperNames[type]} kiralandı! 🤖`, 'success');
+            playSound('sale', 'A4');
+            closeModal();
+            
+            // Başarı efekti
+            createSuccessParticles(gameState.locations.storageBox.pos);
+        } else {
+            showMessage('Yeterli para yok! 💸', 'error');
+            playSound('error', 'C3');
+        }
+    };
+
+    window.purchaseUpgrade = function(key) {
+        const loc = gameState.locations[key];
+        const cost = COSTS.upgrades[key] * loc.level;
+        
+        if (gameState.player.money >= cost) {
+            gameState.player.money -= cost;
+            loc.level++;
+            
+            const names = {
+                cow: 'İnek Ahırı',
+                chicken: 'Kümes', 
+                wheat: 'Tarla',
+                oven: 'Fırın',
+                tree: 'Orman'
+            };
+            
+            showMessage(`${names[key]} seviye ${loc.level}'e yükseltildi! ⬆️`, 'success');
+            playSound('sale', 'G4');
+            closeModal();
+            
+            // Başarı efekti
+            createSuccessParticles(loc.pos);
+        } else {
+            showMessage('Yeterli para yok! 💸', 'error');
+            playSound('error', 'C3');
+        }
+    };
+
+    window.purchaseBuilding = function(key) {
+        const cost = COSTS.buildings[key === 'mill' ? 'mill' : 'marketStall'];
+        
+        if (gameState.player.money >= cost) {
+            gameState.player.money -= cost;
+            
+            if (key === 'mill') {
+                gameState.locations.mill.owned = true;
+                showMessage('Değirmen inşa edildi! ⚙️', 'success');
+                createSuccessParticles(gameState.locations.mill.pos);
+            } else if (key === 'salesCounter2') {
+                gameState.locations.salesCounter2.owned = true;
+                showMessage('2. Satış tezgahı açıldı! 🛒', 'success');
+                createSuccessParticles(gameState.locations.salesCounter2.pos);
+            }
+            
+            playSound('sale', 'G4');
+            closeModal();
+        } else {
+            showMessage('Yeterli para yok! 💸', 'error');
+            playSound('error', 'C3');
+        }
+    };
+
+    // Başarı partikülleri
+    function createSuccessParticles(pos) {
+        if (!gameState.particles) gameState.particles = [];
+        
+        for (let i = 0; i < 8; i++) {
+            gameState.particles.push({
+                x: pos.x,
+                y: pos.y,
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8 - 2,
+                life: 60,
+                maxLife: 60,
+                color: ['#FFD700', '#FFA500', '#FF6347', '#32CD32'][Math.floor(Math.random() * 4)]
+            });
+        }
+    }
+
+    // Partikül güncelleme
+    function updateParticles() {
+        if (!gameState.particles) return;
+        
+        gameState.particles = gameState.particles.filter(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.2; // Yer çekimi
+            p.life--;
+            return p.life > 0;
+        });
+    }
+
+    // Partikül çizimi
+    function drawParticles(ctx) {
+        if (!gameState.particles) return;
+        
+        gameState.particles.forEach(p => {
+            const alpha = p.life / p.maxLife;
+            ctx.fillStyle = p.color + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+            ctx.fill();
+        });
+    }
+
+    // Mesaj gösterme (geliştirilmiş)
+    let messageTimer;
+    function showMessage(text, type = 'info', duration = 3000) {
+        clearTimeout(messageTimer);
+        
+        messageBox.textContent = text;
+        messageBox.className = 'h-12 bg-black/40 rounded-lg flex items-center justify-center p-3 text-center font-semibold border transition-all duration-300';
+        
+        if (type === 'success') {
+            messageBox.classList.add('text-green-300', 'border-green-500', 'bg-green-900/30');
+        } else if (type === 'error') {
+            messageBox.classList.add('text-red-400', 'border-red-500', 'bg-red-900/30');
+        } else {
+            messageBox.classList.add('text-yellow-200', 'border-yellow-500', 'bg-yellow-900/30');
+        }
+        
+        messageBox.classList.add('message-glow');
+        
+        messageTimer = setTimeout(() => {
+            messageBox.textContent = '';
+            messageBox.className = 'h-12 bg-black/40 rounded-lg flex items-center justify-center p-3 text-center text-yellow-200 font-semibold border border-gray-600';
+            messageBox.classList.remove('message-glow');
+        }, duration);
+    }
+
+    // Otomatik kaydetme sistemi
+    function saveGame() {
+        const saveData = {
+            player: gameState.player,
+            storage: gameState.storage,
+            locations: gameState.locations,
+            helpers: gameState.helpers.map(h => ({
+                id: h.id,
+                type: h.type,
+                pos: h.pos
+            })) // Sadece temel bilgileri kaydet
+        };
+        
+        localStorage.setItem('farmEmpire_save', JSON.stringify(saveData));
+    }
+
+    function loadGame() {
+        try {
+            const saveData = localStorage.getItem('farmEmpire_save');
+            if (saveData) {
+                const data = JSON.parse(saveData);
+                
+                // Oyuncu ve depo bilgilerini yükle
+                if (data.player) gameState.player = { ...gameState.player, ...data.player };
+                if (data.storage) gameState.storage = { ...gameState.storage, ...data.storage };
+                if (data.locations) {
+                    Object.keys(data.locations).forEach(key => {
+                        if (gameState.locations[key]) {
+                            gameState.locations[key] = { ...gameState.locations[key], ...data.locations[key] };
+                        }
+                    });
+                }
+                
+                // Robotları yükle
+                if (data.helpers && Array.isArray(data.helpers)) {
+                    gameState.helpers = data.helpers.map(h => ({
+                        ...h,
+                        task: null,
+                        targetPos: null,
+                        hasItem: false,
+                        targetSource: null,
+                        targetMachine: null,
+                        targetCustomer: null,
+                        itemToSell: null,
+                        productType: null
+                    }));
+                }
+                
+                showMessage('Oyun yüklendi! 💾', 'success');
+                return true;
+            }
+        } catch (e) {
+            console.error('Oyun yüklenirken hata:', e);
+            showMessage('Kayıt dosyası bozuk! 🚫', 'error');
+        }
+        return false;
+    }
+
+    // Periyodik kaydetme
+    setInterval(() => {
+        if (gameState.player) {
+            saveGame();
+        }
+    }, 30000); // Her 30 saniyede kaydet
+
+    // Sayfa kapatılırken kaydet
+    window.addEventListener('beforeunload', () => {
+        if (gameState.player) {
+            saveGame();
+        }
+    });
