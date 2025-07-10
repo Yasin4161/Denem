@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çiftlik İmparatorluğu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Baloo 2', cursive; 
+            touch-action: manipulation; 
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .game-container { 
+            width: 100%; 
+            max-width: 95vw; 
+            max-height: 95vh; 
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        canvas { 
+            background: linear-gradient(45deg, #86efac 0%, #78c078 50%, #65a65e 100%); 
+            border-radius: 1rem; 
+            border: 6px solid #8B5A2B; 
+            width: 100%; 
+            height: auto; 
+            aspect-ratio: 20 / 15; 
+            box-shadow: 
+                inset 0 0 20px rgba(0,0,0,0.2),
+                0 15px 35px rgba(0,0,0,0.3),
+                0 5px 15px rgba(0,0,0,0.2);
+        }
+        .control-button, .action-button { 
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%; 
+            background: linear-gradient(145deg, #fbbf24, #f59e0b);
+            border: 3px solid #d97706; 
+            box-shadow: 
+                0 8px 15px rgba(0,0,0,0.3),
+                inset 0 2px 4px rgba(255,255,255,0.3);
+            transition: all 0.2s ease-in-out; 
+            user-select: none; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .control-button:active, .action-button:active { 
+            transform: translateY(3px) scale(0.92); 
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.3),
+                inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .modal { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px);
+        }
+        .stats-panel {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        .message-glow {
+            animation: messageGlow 2s ease-in-out;
+        }
+        @keyframes messageGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.6); }
+        }
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen">
+
+    <!-- BAŞLANGIÇ EKRANI -->
+    <div id="start-screen" class="w-full h-full flex flex-col items-center justify-center text-white text-center p-4 bg-cover bg-center relative" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI4MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDgwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iODAwIiBmaWxsPSIjMjJjNTVlIi8+Cjwvc3ZnPgo=');">
+        <div class="floating-animation">
+            <h1 class="text-4xl md:text-7xl font-bold mb-8 text-yellow-300 drop-shadow-lg" style="text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;">
+                🌾 Çiftlik İmparatorluğu 🌾
+            </h1>
+        </div>
+        <p class="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl">
+            Hayvanlara bakın, ürün toplayın, para kazanın ve çiftliğinizi büyütün!
+        </p>
+        <button id="play-btn" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-lg text-2xl border-b-4 border-green-700 hover:border-green-800 shadow-lg transform hover:scale-105 transition-all duration-200 animate-pulse">
+            🎮 Oyuna Başla
+        </button>
+    </div>
+
+    <!-- OYUN EKRANI -->
+    <div id="game-container" class="game-container text-white rounded-2xl shadow-2xl p-4 flex-col gap-3 hidden">
+        <!-- İstatistikler -->
+        <div class="stats-panel grid grid-cols-3 md:grid-cols-6 gap-2 text-center p-3 rounded-lg text-sm md:text-base">
+            <div class="flex items-center justify-center gap-1">
+                <span class="text-yellow-400">💰</span>
+                <span id="money" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🥛</span>
+                <span id="milk" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🥚</span>
+                <span id="egg" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🪵</span>
+                <span id="wood" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🌾</span>
+                <span id="wheat" class="font-bold">0</span>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+                <span>🍞</span>
+                <span id="bread" class="font-bold">0</span>
+            </div>
+        </div>
+
+        <!-- Mesaj Kutusu -->
+        <div id="message-box" class="h-12 bg-black/40 rounded-lg flex items-center justify-center p-3 text-center text-yellow-200 font-semibold border border-gray-600"></div>
+
+        <!-- Oyun Alanı -->
+        <div class="flex-grow flex items-center justify-center">
+            <canvas id="game-canvas"></canvas>
+        </div>
+
+        <!-- Kontroller ve Butonlar -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <!-- Hareket Kontrolleri -->
+            <div class="grid grid-cols-3 gap-2 w-48">
+                <div></div>
+                <button id="up-btn" class="control-button">⬆️</button>
+                <div></div>
+                <button id="left-btn" class="control-button">⬅️</button>
+                <button id="down-btn" class="control-button">⬇️</button>
+                <button id="right-btn" class="control-button">➡️</button>
+            </div>
+
+            <!-- Aksiyon Butonları -->
+            <div class="flex items-center gap-3">
+                <button id="hire-helper-btn" class="action-button bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700" title="Yardımcı Kirala">
+                    🤖
+                </button>
+                <button id="market-btn" class="action-button bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700" title="Pazar">
+                    🏪
+                </button>
+                <button id="info-btn" class="action-button bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700" title="Bilgi">
+                    ℹ️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALLAR -->
+    <div id="modal-backdrop" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 invisible opacity-0">
+        <div id="modal-content" class="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-slate-600 rounded-xl p-6 max-w-sm w-full text-white shadow-2xl">
+            <h2 id="modal-title" class="text-2xl font-bold mb-4 text-yellow-300 text-center"></h2>
+            <div id="modal-body" class="space-y-3 max-h-96 overflow-y-auto"></div>
+            <button id="modal-close-btn" class="mt-6 w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200">
+                ❌ Kapat
+            </button>
+        </div>
+    </div>
+    
+    <script>
+    // GLOBAL DEĞİŞKENLER
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    const BOARD_WIDTH = 20, BOARD_HEIGHT = 15, TILE_SIZE = 50;
+    canvas.width = BOARD_WIDTH * TILE_SIZE;
+    canvas.height = BOARD_HEIGHT * TILE_SIZE;
+
+    const moneyEl = document.getElementById('money');
+    const milkEl = document.getElementById('milk');
+    const eggEl = document.getElementById('egg');
+    const woodEl = document.getElementById('wood');
+    const wheatEl = document.getElementById('wheat');
+    const breadEl = document.getElementById('bread');
+    const messageBox = document.getElementById('message-box');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    
+    let gameState = {};
+    let sounds = {};
+    let audioStarted = false;
+    const keys = { up: { pressed: false }, down: { pressed: false }, left: { pressed: false }, right: { pressed: false } };
+
+    const COOLDOWNS = { milk: 8 * 60, egg: 6 * 60, wheat: 10 * 60, wood: 25 * 60 };
+    const ITEM_PRICES = { milk: 12, egg: 8, wood: 15, wheat: 6, bread: 35 };
+    const COSTS = {
+        helpers: { milk: 120, egg: 180, wood: 300 },
+        upgrades: { cow: 250, chicken: 200, wheat: 150, tree: 180 }
+    };
+
+    // SES FONKSİYONLARI
+    function initializeSounds() { 
+        if (typeof Tone === 'undefined') return;
+        sounds = { 
+            synth: new Tone.Synth().toDestination(),
+            collect: new Tone.Synth({ oscillator: { type: 'triangle' } }).toDestination(), 
+            sale: new Tone.Synth({ oscillator: { type: 'sine' } }).toDestination(), 
+            error: new Tone.Synth({ oscillator: { type: 'square' } }).toDestination()
+        }; 
+    }
+    
+    function playSound(type, note, duration = '8n') { 
+        if (!audioStarted || !sounds[type]) return; 
+        try { 
+            sounds[type].triggerAttackRelease(note, duration); 
+        } catch (e) { 
+            console.error("Ses çalınamadı:", e); 
+        } 
+    }
+
+    // ÇİZİM FONKSİYONLARI
+    function drawPlayer(ctx, pos) {
+        // Kafa
+        ctx.fillStyle = '#ffc0cb'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x, pos.y - 15, 15, 0, Math.PI * 2); 
+        ctx.fill(); 
+        
+        // Saç
+        ctx.fillStyle = '#654321';
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y - 20, 18, Math.PI, 2 * Math.PI);
+        ctx.fill();
+        
+        // Vücut
+        ctx.fillStyle = '#800080'; 
+        ctx.fillRect(pos.x - 12, pos.y, 24, 30);
+        
+        // Kollar
+        ctx.fillStyle = '#e0ac69';
+        ctx.fillRect(pos.x - 18, pos.y + 5, 8, 20);
+        ctx.fillRect(pos.x + 10, pos.y + 5, 8, 20);
+        
+        // Ayaklar
+        ctx.fillStyle = '#000080';
+        ctx.fillRect(pos.x - 10, pos.y + 28, 8, 12);
+        ctx.fillRect(pos.x + 2, pos.y + 28, 8, 12);
+    }
+    
+    function drawCow(ctx, pos) {
+        // Vücut
+        ctx.fillStyle = 'white'; 
+        ctx.beginPath(); 
+        ctx.ellipse(pos.x, pos.y, 35, 25, 0, 0, Math.PI * 2); 
+        ctx.fill(); 
+        ctx.strokeStyle = 'black'; 
+        ctx.lineWidth = 2; 
+        ctx.stroke(); 
+        
+        // Benekler
+        ctx.fillStyle = 'black'; 
+        ctx.beginPath(); 
+        ctx.ellipse(pos.x - 20, pos.y - 8, 10, 6, -0.5, 0, Math.PI * 2); 
+        ctx.fill(); 
+        ctx.beginPath(); 
+        ctx.ellipse(pos.x + 15, pos.y + 10, 12, 8, 0.7, 0, Math.PI * 2); 
+        ctx.fill(); 
+        
+        // Kafa
+        ctx.fillStyle = 'white'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x + 30, pos.y - 15, 18, 0, Math.PI * 2); 
+        ctx.fill(); 
+        ctx.stroke(); 
+        
+        // Göz
+        ctx.fillStyle = 'black'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x + 35, pos.y - 18, 3, 0, Math.PI * 2); 
+        ctx.fill();
+    }
+    
+    function drawChicken(ctx, pos) {
+        // Vücut
+        ctx.fillStyle = '#FFFACD'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x, pos.y, 18, 0, Math.PI * 2); 
+        ctx.fill(); 
+        
+        // Kafa
+        ctx.beginPath(); 
+        ctx.arc(pos.x + 12, pos.y - 15, 10, 0, Math.PI * 2); 
+        ctx.fill(); 
+        
+        // İbik
+        ctx.fillStyle = 'red'; 
+        ctx.beginPath(); 
+        ctx.moveTo(pos.x + 10, pos.y - 25); 
+        ctx.lineTo(pos.x + 14, pos.y - 30); 
+        ctx.lineTo(pos.x + 18, pos.y - 25); 
+        ctx.fill(); 
+        
+        // Gaga
+        ctx.fillStyle = 'orange'; 
+        ctx.beginPath(); 
+        ctx.moveTo(pos.x + 22, pos.y - 15); 
+        ctx.lineTo(pos.x + 28, pos.y - 12); 
+        ctx.lineTo(pos.x + 22, pos.y - 9); 
+        ctx.fill();
+    }
+    
+    function drawWheatField(ctx, pos) {
+        // Zemin
+        ctx.fillStyle = '#8B4513';
+        ctx.fillRect(pos.x - 25, pos.y - 20, 50, 40);
+        
+        // Buğday sapları
+        ctx.fillStyle = '#DAA520'; 
+        for(let i = -20; i < 25; i += 8) { 
+            for (let j = -15; j < 20; j += 10) { 
+                ctx.fillRect(pos.x + i, pos.y + j, 3, 18); 
+                // Başaklar
+                ctx.fillStyle = '#f5deb3';
+                ctx.fillRect(pos.x + i - 1, pos.y + j - 5, 5, 8);
+                ctx.fillStyle = '#DAA520';
+            } 
+        }
+    }
+    
+    function drawTree(ctx, pos) {
+        // Gövde
+        ctx.fillStyle = '#8B4513'; 
+        ctx.fillRect(pos.x - 8, pos.y - 25, 16, 50); 
+        
+        // Yapraklar (3 katman)
+        ctx.fillStyle = '#228B22'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x, pos.y - 35, 30, 0, Math.PI * 2); 
+        ctx.fill(); 
+        
+        ctx.fillStyle = '#32CD32'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x + 12, pos.y - 45, 25, 0, Math.PI * 2); 
+        ctx.fill(); 
+        
+        ctx.fillStyle = '#3CB371'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x - 10, pos.y - 50, 22, 0, Math.PI * 2); 
+        ctx.fill();
+    }
+
+    function drawIndicator(ctx, pos, emoji) { 
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'; 
+        ctx.beginPath(); 
+        ctx.arc(pos.x, pos.y - 50, 20, 0, Math.PI * 2); 
+        ctx.fill(); 
+        
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        ctx.fillStyle = 'black'; 
+        ctx.font = '24px sans-serif';
+        ctx.textAlign = 'center'; 
+        ctx.textBaseline = 'middle'; 
+        ctx.fillText(emoji, pos.x, pos.y - 50); 
+    }
+
+    function drawBackground(ctx) { 
+        // Arkaplan gradyanı
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, '#86efac');
+        gradient.addColorStop(0.5, '#78c078');
+        gradient.addColorStop(1, '#65a65e');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height); 
+        
+        // Çiçekler ve detaylar
+        for (let i = 0; i < 8; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            ctx.fillStyle = ['#FF69B4', '#FFB6C1', '#FFA500', '#FFFF00'][Math.floor(Math.random() * 4)];
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    // OYUN MEKANİKLERİ
+    function distance(pos1, pos2) {
+        return Math.hypot(pos1.x - pos2.x, pos1.y - pos2.y);
+    }
+
+    function checkInteraction() {
+        const now = Date.now();
+        if (now - gameState.lastInteractionTime < 300) return;
+        
+        let interacted = false;
+        
+        // Kaynak toplama
+        Object.values(gameState.locations).forEach(loc => {
+            if (loc.owned && distance(gameState.player.pos, loc.pos) < 60) {
+                if (loc.ready && ['cow', 'chicken', 'wheat', 'tree'].includes(loc.type)) {
+                    const itemMap = { cow: 'milk', chicken: 'egg', wheat: 'wheat', tree: 'wood' };
+                    const itemType = itemMap[loc.type];
+                    
+                    gameState.storage[itemType] += loc.level || 1;
+                    loc.ready = false;
+                    loc.cooldown = COOLDOWNS[itemType];
+                    
+                    showMessage(`${loc.level || 1} ${itemType} topladın!`, 'success');
+                    playSound('collect', 'E5');
+                    interacted = true;
+                }
+            }
+        });
+        
+        if (interacted) {
+            gameState.lastInteractionTime = now;
+        }
+    }
+
+    // RENDER FONKSİYONU
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBackground(ctx);
+        
+        // Çizilecek nesneleri topla ve sırala
+        let objectsToDraw = [];
+        
+        // Lokasyonları ekle
+        Object.values(gameState.locations).forEach(loc => {
+            if (loc.owned) {
+                let drawFunc, indicator;
+                
+                switch(loc.type) {
+                    case 'cow': drawFunc = drawCow; indicator = '🥛'; break;
+                    case 'chicken': drawFunc = drawChicken; indicator = '🥚'; break;
+                    case 'wheat': drawFunc = drawWheatField; indicator = '🌾'; break;
+                    case 'tree': drawFunc = drawTree; indicator = '🪵'; break;
+                }
+                
+                if (drawFunc) {
+                    objectsToDraw.push({
+                        draw: drawFunc,
+                        obj: loc,
+                        indicator: indicator,
+                        y: loc.pos.y
+                    });
+                }
+            }
+        });
+        
+        // Oyuncuyu ekle
+        objectsToDraw.push({
+            draw: drawPlayer,
+            obj: gameState.player,
+            y: gameState.player.pos.y
+        });
+        
+        // Y koordinatına göre sırala (derinlik illüzyonu)
+        objectsToDraw.sort((a, b) => a.y - b.y);
+        
+        // Çiz
+        objectsToDraw.forEach(({ draw, obj, indicator }) => {
+            draw(ctx, obj.pos);
+            
+            if (indicator && obj.ready) {
+                drawIndicator(ctx, obj.pos, indicator);
+            }
+        });
+        
+        // UI güncelleme
+        updateUI();
+    }
+
+    function updateUI() {
+        moneyEl.textContent = gameState.player.money;
+        milkEl.textContent = gameState.storage.milk;
+        eggEl.textContent = gameState.storage.egg;
+        woodEl.textContent = gameState.storage.wood;
+        wheatEl.textContent = gameState.storage.wheat;
+        breadEl.textContent = gameState.storage.bread;
+    }
+
+    // OYUN GÜNCELLEMESİ
+    function update() {
+        // Oyuncu hareketi
+        const speed = 4;
+        if (keys.up.pressed && gameState.player.pos.y > 25) gameState.player.pos.y -= speed;
+        if (keys.down.pressed && gameState.player.pos.y < canvas.height - 25) gameState.player.pos.y += speed;
+        if (keys.left.pressed && gameState.player.pos.x > 25) gameState.player.pos.x -= speed;
+        if (keys.right.pressed && gameState.player.pos.x < canvas.width - 25) gameState.player.pos.x += speed;
+        
+        // Etkileşim kontrolü
+        checkInteraction();
+        
+        // Cooldown güncelleme
+        Object.values(gameState.locations).forEach(loc => {
+            if (loc.owned && loc.cooldown > 0) {
+                loc.cooldown--;
+                if (loc.cooldown <= 0) {
+                    loc.ready = true;
+                }
+            }
+        });
+    }
+
+    // MODAL VE UI FONKSİYONLARI
+    function openModal(title, content) {
+        modalTitle.textContent = title;
+        modalBody.innerHTML = content;
+        modalBackdrop.classList.remove('invisible', 'opacity-0');
+        playSound('synth', 'C4');
+    }
+
+    function closeModal() {
+        modalBackdrop.classList.add('invisible', 'opacity-0');
+    }
+
+    function setupModals() {
+        // Yardımcı kiralama
+        document.getElementById('hire-helper-btn').addEventListener('click', () => {
+            const content = `
+                <div class="space-y-2">
+                    <button class="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded-lg transition-colors" onclick="showMessage('Robot sistemi geliştiriliyor!', 'info')">
+                        🥛 Süt Robot - ${COSTS.helpers.milk}💰
+                        <div class="text-sm opacity-75">Otomatik süt toplar</div>
+                    </button>
+                    <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-black p-3 rounded-lg transition-colors" onclick="showMessage('Robot sistemi geliştiriliyor!', 'info')">
+                        🥚 Yumurta Robot - ${COSTS.helpers.egg}💰
+                        <div class="text-sm opacity-75">Otomatik yumurta toplar</div>
+                    </button>
+                    <button class="w-full bg-green-600 hover:bg-green-700 p-3 rounded-lg transition-colors" onclick="showMessage('Robot sistemi geliştiriliyor!', 'info')">
+                        🪵 Odun Robot - ${COSTS.helpers.wood}💰
+                        <div class="text-sm opacity-75">Otomatik odun toplar</div>
+                    </button>
+                </div>
+            `;
+            openModal('🤖 Robot İşçi Kirala', content);
+        });
+
+        // Pazar yeri
+        document.getElementById('market-btn').addEventListener('click', () => {
+            const content = `
+                <div class="space-y-2">
+                    <h3 class="text-lg font-bold text-yellow-300 mb-3">💰 Satış</h3>
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-lg transition-colors" onclick="sellItem('milk')">
+                        🥛 Süt Sat - ${ITEM_PRICES.milk}💰
+                        <div class="text-sm opacity-75">Stok: ${gameState.storage.milk}</div>
+                    </button>
+                    <button class="w-full bg-yellow-600 hover:bg-yellow-700 p-3 rounded-lg transition-colors" onclick="sellItem('egg')">
+                        🥚 Yumurta Sat - ${ITEM_PRICES.egg}💰
+                        <div class="text-sm opacity-75">Stok: ${gameState.storage.egg}</div>
+                    </button>
+                    <button class="w-full bg-green-600 hover:bg-green-700 p-3 rounded-lg transition-colors" onclick="sellItem('wood')">
+                        🪵 Odun Sat - ${ITEM_PRICES.wood}💰
+                        <div class="text-sm opacity-75">Stok: ${gameState.storage.wood}</div>
+                    </button>
+                    <button class="w-full bg-amber-600 hover:bg-amber-700 p-3 rounded-lg transition-colors" onclick="sellItem('wheat')">
+                        🌾 Buğday Sat - ${ITEM_PRICES.wheat}💰
+                        <div class="text-sm opacity-75">Stok: ${gameState.storage.wheat}</div>
+                    </button>
+                </div>
+            `;
+            openModal('🏪 Pazar Yeri', content);
+        });
+
+        // Bilgi butonu
+        document.getElementById('info-btn').addEventListener('click', () => {
+            const totalValue = Object.entries(gameState.storage).reduce((sum, [item, count]) => {
+                return sum + (count * (ITEM_PRICES[item] || 0));
+            }, 0);
+            
+            const totalAssets = gameState.player.money + totalValue;
+            
+            const content = `
+                <div class="text-sm space-y-3">
+                    <div class="bg-slate-700 p-3 rounded-lg">
+                        <h3 class="font-bold text-yellow-300 mb-2">📊 İstatistikler</h3>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>💰 Para: ${gameState.player.money}</div>
+                            <div>📦 Depo: ${totalValue}💰</div>
+                            <div>🏆 Toplam: ${totalAssets}💰</div>
+                            <div>⭐ Seviye: ${Math.floor(totalAssets / 1000) + 1}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-700 p-3 rounded-lg">
+                        <h3 class="font-bold text-yellow-300 mb-2">🎮 Kontroller</h3>
+                        <div class="text-xs space-y-1">
+                            <p>🎯 <strong>Hareket:</strong> Ok tuşları veya WASD</p>
+                            <p>🎯 <strong>Toplama:</strong> Hayvanlara yaklaşın</p>
+                            <p>🎯 <strong>Satış:</strong> Pazar butonunu kullanın</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-700 p-3 rounded-lg">
+                        <h3 class="font-bold text-yellow-300 mb-2">💰 Fiyat Listesi</h3>
+                        <div class="grid grid-cols-2 gap-1 text-xs">
+                            <div>🥛 Süt: ${ITEM_PRICES.milk}💰</div>
+                            <div>🥚 Yumurta: ${ITEM_PRICES.egg}💰</div>
+                            <div>🪵 Odun: ${ITEM_PRICES.wood}💰</div>
+                            <div>🌾 Buğday: ${ITEM_PRICES.wheat}💰</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-900/50 p-3 rounded-lg">
+                        <h3 class="font-bold text-blue-300 mb-2">🎯 Hedefler</h3>
+                        <div class="text-xs space-y-1">
+                            ${totalAssets < 1000 ? '<p>🎯 1,000💰 biriktirin</p>' : ''}
+                            ${totalAssets < 5000 ? '<p>🎯 5,000💰 biriktirin</p>' : ''}
+                            ${totalAssets >= 10000 ? '<p>🏆 Çiftlik İmparatoru oldunuz!</p>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            openModal('ℹ️ Oyun Bilgileri', content);
+        });
+
+        // Modal kapatma
+        document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+        
+        // Modal dışına tıklama ile kapatma
+        modalBackdrop.addEventListener('click', (e) => {
+            if (e.target === modalBackdrop) {
+                closeModal();
+            }
+        });
+
+        // ESC tuşu ile kapatma
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modalBackdrop.classList.contains('invisible')) {
+                closeModal();
+            }
+        });
+    }
+
+    // Global fonksiyonlar (modal butonları için)
+    window.sellItem = function(itemType) {
+        if (gameState.storage[itemType] > 0) {
+            gameState.storage[itemType]--;
+            gameState.player.money += ITEM_PRICES[itemType];
+            showMessage(`${itemType} satıldı! +${ITEM_PRICES[itemType]}💰`, 'success');
+            playSound('sale', 'C5');
+            closeModal();
+        } else {
+            showMessage(`${itemType} yok!`, 'error');
+            playSound('error', 'C3');
+        }
+    };
+
+    // Mesaj gösterme
+    let messageTimer;
+    function showMessage(text, type = 'info', duration = 3000) {
+        clearTimeout(messageTimer);
+        
+        messageBox.textContent = text;
+        messageBox.className = 'h-12 bg-black/40 rounded-lg flex items-center justify-center p-3 text-center font-semibold border transition-all duration-300';
+        
+        if (type === 'success') {
+            messageBox.classList.add('text-green-300', 'border-green-500', 'bg-green-900/30');
+        } else if (type === 'error') {
+            messageBox.classList.add('text-red-400', 'border-red-500', 'bg-red-900/30');
+        } else {
+            messageBox.classList.add('text-yellow-200', 'border-yellow-500', 'bg-yellow-900/30');
+        }
+        
+        messageBox.classList.add('message-glow');
+        
+        messageTimer = setTimeout(() => {
+            messageBox.textContent = '';
+            messageBox.className = 'h-12 bg-black/40 rounded-lg flex items-center justify-center p-3 text-center text-yellow-200 font-semibold border border-gray-600';
+            messageBox.classList.remove('message-glow');
+        }, duration);
+    }
+
+    // OYUN BAŞLATMA VE ANA DÖNGÜ
+    function initializeGame() {
+        gameState = {
+            player: { pos: { x: 500, y: 400 }, money: 100 },
+            storage: { milk: 0, egg: 0, wood: 0, wheat: 0, bread: 0 },
+            lastInteractionTime: 0,
+            locations: {
+                cow: { type: 'cow', pos: { x: 200, y: 200 }, owned: true, ready: true, cooldown: 0, level: 1 },
+                chicken: { type: 'chicken', pos: { x: 400, y: 200 }, owned: true, ready: true, cooldown: 0, level: 1 },
+                wheat: { type: 'wheat', pos: { x: 600, y: 200 }, owned: true, ready: true, cooldown: 0, level: 1 },
+                tree: { type: 'tree', pos: { x: 800, y: 200 }, owned: true, ready: true, cooldown: 0, level: 1 }
+            }
+        };
+        
+        // Ses sistemi başlat
+        initializeSounds();
+        
+        // Modal sistemini kur
+        setupModals();
+        
+        // Kontrolleri ayarla
+        setupControls();
+        
+        // Ana oyun döngüsünü başlat
+        gameLoop();
+        
+        showMessage('🌾 Çiftlik İmparatorluğuna hoş geldiniz! 🌾', 'success');
+    }
+
+    function setupControls() {
+        // Klavye kontrolleri
+        window.addEventListener('keydown', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                case 'arrowup':
+                    keys.up.pressed = true;
+                    break;
+                case 's':
+                case 'arrowdown':
+                    keys.down.pressed = true;
+                    break;
+                case 'a':
+                case 'arrowleft':
+                    keys.left.pressed = true;
+                    break;
+                case 'd':
+                case 'arrowright':
+                    keys.right.pressed = true;
+                    break;
+            }
+        });
+        
+        window.addEventListener('keyup', (e) => {
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                case 'arrowup':
+                    keys.up.pressed = false;
+                    break;
+                case 's':
+                case 'arrowdown':
+                    keys.down.pressed = false;
+                    break;
+                case 'a':
+                case 'arrowleft':
+                    keys.left.pressed = false;
+                    break;
+                case 'd':
+                case 'arrowright':
+                    keys.right.pressed = false;
+                    break;
+            }
+        });
+        
+        // Mobil kontroller
+        const moveButtons = ['up-btn', 'down-btn', 'left-btn', 'right-btn'];
+        moveButtons.forEach(id => {
+            const btn = document.getElementById(id);
+            const direction = id.split('-')[0];
+            
+            btn.addEventListener('mousedown', () => keys[direction].pressed = true);
+            btn.addEventListener('mouseup', () => keys[direction].pressed = false);
+            btn.addEventListener('mouseleave', () => keys[direction].pressed = false);
+            
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                keys[direction].pressed = true;
+            });
+            
+            btn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                keys[direction].pressed = false;
+            });
+        });
+    }
+
+    function gameLoop() {
+        update();
+        render();
+        requestAnimationFrame(gameLoop);
+    }
+
+    // Başlangıç ekranı kontrolleri
+    document.getElementById('play-btn').addEventListener('click', async () => {
+        // Ses sistemi için kullanıcı etkileşimi gerekli
+        if (Tone && Tone.context.state !== 'running') {
+            await Tone.start();
+            audioStarted = true;
+        }
+        
+        // Ekranları değiştir
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('game-container').style.display = 'flex';
+        
+        // Oyunu başlat
+        initializeGame();
+    });
+
+    // Sayfa yüklendiğinde başlangıç ekranını göster
+    window.addEventListener('load', () => {
+        document.getElementById('start-screen').style.display = 'flex';
+        document.getElementById('game-container').style.display = 'none';
+    });
+    </script>
+</body>
+</html>
