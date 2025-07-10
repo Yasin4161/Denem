@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>0‡5iftlik 02mparatorlu0Ž6u</title>
+    <title>Â0â€¡5iftlik Â0Â2mparatorluÂ0Å½6u</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
@@ -111,47 +111,47 @@
 </head>
 <body class="flex items-center justify-center h-screen">
 
-    <!-- BA0”5LANGI0‡5 EKRANI -->
+    <!-- BAÂ0â€5LANGIÂ0â€¡5 EKRANI -->
     <div id="start-screen" class="w-full h-full flex flex-col items-center justify-center text-white text-center p-4 bg-cover bg-center relative" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI4MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDgwMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iODAwIiBmaWxsPSIjMjJjNTVlIi8+Cjwvc3ZnPgo=');">
         <div class="floating-animation">
             <h1 class="text-4xl md:text-7xl font-bold mb-8 text-yellow-300 drop-shadow-lg" style="text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;">
-                ”9¶0 0‡5iftlik 02mparatorlu0Ž6u ”9¶0
+                â€9Â¶0 Â0â€¡5iftlik Â0Â2mparatorluÂ0Å½6u â€9Â¶0
             </h1>
         </div>
         <p class="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl">
-            Hayvanlara bak03n, ¨¹r¨¹n toplay03n, para kazan03n ve 0Š4iftli0Ž6inizi b¨¹y¨¹t¨¹n!
+            Hayvanlara bakÂ0Â3n, Â¨Â¹rÂ¨Â¹n toplayÂ0Â3n, para kazanÂ0Â3n ve Â0Å 4iftliÂ0Å½6inizi bÂ¨Â¹yÂ¨Â¹tÂ¨Â¹n!
         </p>
         <button id="play-btn" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-lg text-2xl border-b-4 border-green-700 hover:border-green-800 shadow-lg transform hover:scale-105 transition-all duration-200 animate-pulse">
-            ”9Á2 Oyuna Ba0”6la
+            â€9Ã2 Oyuna BaÂ0â€6la
         </button>
     </div>
 
     <!-- OYUN EKRANI -->
     <div id="game-container" class="game-container text-white rounded-2xl shadow-2xl p-4 flex-col gap-3 hidden">
-        <!-- 02statistikler -->
+        <!-- Â0Â2statistikler -->
         <div class="stats-panel grid grid-cols-3 md:grid-cols-6 gap-2 text-center p-3 rounded-lg text-sm md:text-base">
             <div class="flex items-center justify-center gap-1">
-                <span class="text-yellow-400">”9Û0</span>
+                <span class="text-yellow-400">â€9Ã›0</span>
                 <span id="money" class="font-bold">0</span>
             </div>
             <div class="flex items-center justify-center gap-1">
-                <span>•0Ô5</span>
+                <span>â€¢0Ã”5</span>
                 <span id="milk" class="font-bold">0</span>
             </div>
             <div class="flex items-center justify-center gap-1">
-                <span>•0Ô4</span>
+                <span>â€¢0Ã”4</span>
                 <span id="egg" class="font-bold">0</span>
             </div>
             <div class="flex items-center justify-center gap-1">
-                <span>•0÷1</span>
+                <span>â€¢0Ã·1</span>
                 <span id="wood" class="font-bold">0</span>
             </div>
             <div class="flex items-center justify-center gap-1">
-                <span>”9¶0</span>
+                <span>â€9Â¶0</span>
                 <span id="wheat" class="font-bold">0</span>
             </div>
             <div class="flex items-center justify-center gap-1">
-                <span>•0Õ1</span>
+                <span>â€¢0Ã•1</span>
                 <span id="flour" class="font-bold">0</span>
             </div>
         </div>
@@ -159,7 +159,7 @@
         <!-- Mesaj Kutusu -->
         <div id="message-box" class="h-12 bg-black/40 rounded-lg flex items-center justify-center p-3 text-center text-yellow-200 font-semibold border border-gray-600"></div>
 
-        <!-- Oyun Alan03 -->
+        <!-- Oyun AlanÂ0Â3 -->
         <div class="flex-grow flex items-center justify-center">
             <canvas id="game-canvas"></canvas>
         </div>
@@ -169,23 +169,23 @@
             <!-- Hareket Kontrolleri -->
             <div class="grid grid-cols-3 gap-2 w-48">
                 <div></div>
-                <button id="up-btn" class="control-button">8¤8„1‚5</button>
+                <button id="up-btn" class="control-button">Â8Â¤8â€ž1â€š5</button>
                 <div></div>
-                <button id="left-btn" class="control-button">8¤7„1‚5</button>
-                <button id="down-btn" class="control-button">8¤9„1‚5</button>
-                <button id="right-btn" class="control-button">7Ë9„1‚5</button>
+                <button id="left-btn" class="control-button">Â8Â¤7â€ž1â€š5</button>
+                <button id="down-btn" class="control-button">Â8Â¤9â€ž1â€š5</button>
+                <button id="right-btn" class="control-button">Â7Ã‹9â€ž1â€š5</button>
             </div>
 
-            <!-- Aksiyon Butonlar03 -->
+            <!-- Aksiyon ButonlarÂ0Â3 -->
             <div class="flex items-center gap-3">
-                <button id="hire-helper-btn" class="action-button bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700" title="Yard03mc03 Kirala">
-                    •0à36¤9”9æ9
+                <button id="hire-helper-btn" class="action-button bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700" title="YardÂ0Â3mcÂ0Â3 Kirala">
+                    â€¢0Ã 3Â6Â¤9â€9Ã¦9
                 </button>
                 <button id="market-btn" class="action-button bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700" title="Pazar">
-                    •0“6
+                    â€¢0â€œ6
                 </button>
                 <button id="info-btn" class="action-button bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700" title="Bilgi">
-                    6À7„1‚5
+                    Â6Ã€7â€ž1â€š5
                 </button>
             </div>
         </div>
@@ -197,13 +197,13 @@
             <h2 id="modal-title" class="text-2xl font-bold mb-4 text-yellow-300 text-center"></h2>
             <div id="modal-body" class="space-y-3 max-h-96 overflow-y-auto"></div>
             <button id="modal-close-btn" class="mt-6 w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200">
-                7Ã4 Kapat
+                Â7Ãƒ4 Kapat
             </button>
         </div>
     </div>
     
     <script>
-    // --- GLOBAL DE0Ž5020”5KENLER ---
+    // --- GLOBAL DEÂ0Å½5Â0Â2Â0â€5KENLER ---
     const canvas = document.getElementById('game-canvas');
     const ctx = canvas.getContext('2d');
     const BOARD_WIDTH = 20, BOARD_HEIGHT = 15, TILE_SIZE = 50;
@@ -241,13 +241,13 @@
             marketStall: 1200, mill: 1000 
         }
     };
-    const ITEM_EMOJIS = { milk: '•0Ô5', egg: '•0Ô4', wood: '•0÷1', wheat: '”9¶0', flour: '•0Õ1', bread: '”9¹2' };
+    const ITEM_EMOJIS = { milk: 'â€¢0Ã”5', egg: 'â€¢0Ã”4', wood: 'â€¢0Ã·1', wheat: 'â€9Â¶0', flour: 'â€¢0Ã•1', bread: 'â€9Â¹2' };
     const toPixels = (gridPos) => ({ x: gridPos.x * TILE_SIZE + TILE_SIZE / 2, y: gridPos.y * TILE_SIZE + TILE_SIZE / 2 });
 
-    // --- SES FONKS02YONLARI ---
+    // --- SES FONKSÂ0Â2YONLARI ---
     function initializeSounds() { 
         if (typeof Tone === 'undefined') { 
-            console.error("Tone.js k¨¹t¨¹phanesi y¨¹klenemedi."); 
+            console.error("Tone.js kÂ¨Â¹tÂ¨Â¹phanesi yÂ¨Â¹klenemedi."); 
             return; 
         } 
         sounds = { 
@@ -276,11 +276,11 @@
         try { 
             sounds[type].triggerAttackRelease(note, duration); 
         } catch (e) { 
-            console.error("Ses 0Š4al03namad03:", e); 
+            console.error("Ses Â0Å 4alÂ0Â3namadÂ0Â3:", e); 
         } 
     }
 
-    // --- 02Y02LE0”5T02R02LM020”5 0‡502Z02M FONKS02YONLARI ---
+    // --- Â0Â2YÂ0Â2LEÂ0â€5TÂ0Â2RÂ0Â2LMÂ0Â2Â0â€5 Â0â€¡5Â0Â2ZÂ0Â2M FONKSÂ0Â2YONLARI ---
     function drawWithShadow(drawFunc, shadowColor = 'rgba(0, 0, 0, 0.3)', blur = 8, offsetX = 4, offsetY = 4) { 
         ctx.shadowColor = shadowColor; 
         ctx.shadowBlur = blur; 
@@ -301,13 +301,13 @@
             ctx.arc(pos.x, pos.y - 15, 15, 0, Math.PI * 2); 
             ctx.fill(); 
             
-            // Sa0Š4
+            // SaÂ0Å 4
             ctx.fillStyle = '#654321';
             ctx.beginPath();
             ctx.arc(pos.x, pos.y - 20, 18, Math.PI, 2 * Math.PI);
             ctx.fill();
             
-            // V¨¹cut
+            // VÂ¨Â¹cut
             ctx.fillStyle = '#800080'; 
             ctx.fillRect(pos.x - 12, pos.y, 24, 30);
             
@@ -335,7 +335,7 @@
                 seller: '#90EE90'
             };
             
-            // Robot v¨¹cut
+            // Robot vÂ¨Â¹cut
             ctx.fillStyle = '#C0C0C0'; 
             ctx.fillRect(pos.x - 10, pos.y - 5, 20, 25);
             
@@ -345,7 +345,7 @@
             ctx.arc(pos.x, pos.y - 15, 12, 0, Math.PI * 2); 
             ctx.fill(); 
             
-            // G0‹2z
+            // GÂ0â€¹2z
             ctx.fillStyle = 'red';
             ctx.beginPath();
             ctx.arc(pos.x, pos.y - 15, 4, 0, Math.PI * 2);
@@ -360,13 +360,13 @@
             ctx.fillRect(pos.x - 8, pos.y + 18, 6, 10);
             ctx.fillRect(pos.x + 2, pos.y + 18, 6, 10);
             
-            // E0”6ya ta0”603yor ise g0‹2ster
+            // EÂ0â€6ya taÂ0â€6Â0Â3yor ise gÂ0â€¹2ster
             if(hasItem) { 
                 ctx.font = '16px sans-serif'; 
                 const itemEmoji = {
-                    milk: '•0Ô5', egg: '•0Ô4', wood: '•0÷1', 
-                    miller: '”9¶0', baker: '•0Õ1', collector: '”9¹2', seller: '”9Û0'
-                }[type] || '7Ä2'; 
+                    milk: 'â€¢0Ã”5', egg: 'â€¢0Ã”4', wood: 'â€¢0Ã·1', 
+                    miller: 'â€9Â¶0', baker: 'â€¢0Ã•1', collector: 'â€9Â¹2', seller: 'â€9Ã›0'
+                }[type] || 'Â7Ã„2'; 
                 ctx.fillText(itemEmoji, pos.x + 18, pos.y - 5); 
             } 
         }); 
@@ -410,7 +410,7 @@
         const bubbleX = pos.x; 
         const bubbleY = pos.y - 60; 
         
-        // Konu0”6ma balonu
+        // KonuÂ0â€6ma balonu
         ctx.fillStyle = 'white'; 
         ctx.strokeStyle = 'black'; 
         ctx.lineWidth = 3; 
@@ -437,12 +437,12 @@
     }PI * 2); 
             ctx.fill(); 
             
-            // 0”5apka
+            // Â0â€5apka
             ctx.fillStyle = '#8B4513'; 
             ctx.fillRect(pos.x - 18, pos.y - 25, 36, 10); 
             ctx.fillRect(pos.x - 10, pos.y - 35, 20, 12); 
             
-            // V¨¹cut
+            // VÂ¨Â¹cut
             ctx.fillStyle = '#4682B4'; 
             ctx.beginPath(); 
             ctx.moveTo(pos.x - 12, pos.y); 
@@ -461,7 +461,7 @@
     
     function drawCow(ctx, pos) { 
         drawWithShadow(() => { 
-            // V¨¹cut
+            // VÂ¨Â¹cut
             ctx.fillStyle = 'white'; 
             ctx.beginPath(); 
             ctx.ellipse(pos.x, pos.y, 35, 25, 0, 0, Math.PI * 2); 
@@ -486,7 +486,7 @@
             ctx.fill(); 
             ctx.stroke(); 
             
-            // G0‹2z
+            // GÂ0â€¹2z
             ctx.fillStyle = 'black'; 
             ctx.beginPath(); 
             ctx.arc(pos.x + 35, pos.y - 18, 3, 0, Math.PI * 2); 
@@ -506,7 +506,7 @@
     
     function drawChicken(ctx, pos) { 
         drawWithShadow(() => { 
-            // V¨¹cut
+            // VÂ¨Â¹cut
             ctx.fillStyle = '#FFFACD'; 
             ctx.beginPath(); 
             ctx.arc(pos.x, pos.y, 18, 0, Math.PI * 2); 
@@ -551,12 +551,12 @@
             ctx.fillStyle = '#8B4513';
             ctx.fillRect(pos.x - 25, pos.y - 20, 50, 40);
             
-            // Bu0Ž6day saplar03
+            // BuÂ0Å½6day saplarÂ0Â3
             ctx.fillStyle = '#DAA520'; 
             for(let i = -20; i < 25; i += 8) { 
                 for (let j = -15; j < 20; j += 10) { 
                     ctx.fillRect(pos.x + i, pos.y + j, 3, 18); 
-                    // Ba0”6aklar
+                    // BaÂ0â€6aklar
                     ctx.fillStyle = '#f5deb3';
                     ctx.fillRect(pos.x + i - 1, pos.y + j - 5, 5, 8);
                     ctx.fillStyle = '#DAA520';
@@ -567,7 +567,7 @@
     
     function drawTree(ctx, pos) { 
         drawWithShadow(() => { 
-            // G0‹2vde
+            // GÂ0â€¹2vde
             ctx.fillStyle = '#8B4513'; 
             ctx.fillRect(pos.x - 8, pos.y - 25, 16, 50); 
             
@@ -601,13 +601,13 @@
             ctx.closePath(); 
             ctx.fill(); 
             
-            // 0‡5at03
+            // Â0â€¡5atÂ0Â3
             ctx.fillStyle = '#A0522D'; 
             ctx.beginPath(); 
             ctx.arc(pos.x, pos.y - 25, 30, 0, Math.PI, true); 
             ctx.fill(); 
             
-            // Kap03
+            // KapÂ0Â3
             ctx.fillStyle = '#8B4513';
             ctx.fillRect(pos.x - 10, pos.y + 15, 20, 20);
             
@@ -624,7 +624,7 @@
     
     function drawOven(ctx, pos) { 
         drawWithShadow(() => { 
-            // Ana yap03
+            // Ana yapÂ0Â3
             ctx.fillStyle = '#A9A9A9'; 
             ctx.fillRect(pos.x - 30, pos.y - 25, 60, 50); 
             
@@ -632,11 +632,11 @@
             ctx.fillStyle = '#696969';
             ctx.fillRect(pos.x - 5, pos.y - 45, 10, 20);
             
-            // 0‡5at03
+            // Â0â€¡5atÂ0Â3
             ctx.fillStyle = '#8B4513'; 
             ctx.fillRect(pos.x - 33, pos.y - 28, 66, 8); 
             
-            // F03r03n a0Ž6z03
+            // FÂ0Â3rÂ0Â3n aÂ0Å½6zÂ0Â3
             ctx.fillStyle = 'black'; 
             ctx.fillRect(pos.x - 18, pos.y - 5, 36, 20);
             
@@ -686,7 +686,7 @@
             ctx.lineWidth = 4; 
             ctx.strokeRect(pos.x - 25, pos.y - 20, 50, 40); 
             
-            // X i0”6areti
+            // X iÂ0â€6areti
             ctx.beginPath(); 
             ctx.moveTo(pos.x - 25, pos.y - 20); 
             ctx.lineTo(pos.x + 25, pos.y + 20); 
@@ -712,13 +712,13 @@
             ctx.arc(pos.x, pos.y - 15, 15, 0, Math.PI * 2); 
             ctx.fill(); 
             
-            // Sa0Š4
+            // SaÂ0Å 4
             ctx.fillStyle = '#654321';
             ctx.beginPath();
             ctx.arc(pos.x, pos.y - 20, 18, Math.PI, 2 * Math.PI);
             ctx.fill();
             
-            // V¨¹cut
+            // VÂ¨Â¹cut
             ctx.fillStyle = '#800080'; 
             ctx.fillRect(pos.x - 12, pos.y, 24, 30);
             
@@ -746,7 +746,7 @@
                 seller: '#90EE90'
             };
             
-            // Robot v¨¹cut
+            // Robot vÂ¨Â¹cut
             ctx.fillStyle = '#C0C0C0'; 
             ctx.fillRect(pos.x - 10, pos.y - 5, 20, 25);
             
@@ -756,7 +756,7 @@
             ctx.arc(pos.x, pos.y - 15, 12, 0, Math.PI * 2); 
             ctx.fill(); 
             
-            // G0‹2z
+            // GÂ0â€¹2z
             ctx.fillStyle = 'red';
             ctx.beginPath();
             ctx.arc(pos.x, pos.y - 15, 4, 0, Math.PI * 2);
@@ -771,13 +771,13 @@
             ctx.fillRect(pos.x - 8, pos.y + 18, 6, 10);
             ctx.fillRect(pos.x + 2, pos.y + 18, 6, 10);
             
-            // E0”6ya ta0”603yor ise g0‹2ster
+            // EÂ0â€6ya taÂ0â€6Â0Â3yor ise gÂ0â€¹2ster
             if(hasItem) { 
                 ctx.font = '16px sans-serif'; 
                 const itemEmoji = {
-                    milk: '•0Ô5', egg: '•0Ô4', wood: '•0÷1', 
-                    miller: '”9¶0', baker: '•0Õ1', collector: '”9¹2', seller: '”9Û0'
-                }[type] || '7Ä2'; 
+                    milk: 'â€¢0Ã”5', egg: 'â€¢0Ã”4', wood: 'â€¢0Ã·1', 
+                    miller: 'â€9Â¶0', baker: 'â€¢0Ã•1', collector: 'â€9Â¹2', seller: 'â€9Ã›0'
+                }[type] || 'Â7Ã„2'; 
                 ctx.fillText(itemEmoji, pos.x + 18, pos.y - 5); 
             } 
         }); 
@@ -821,7 +821,7 @@
         const bubbleX = pos.x; 
         const bubbleY = pos.y - 60; 
         
-        // Konu0”6ma balonu
+        // KonuÂ0â€6ma balonu
         ctx.fillStyle = 'white'; 
         ctx.strokeStyle = 'black'; 
         ctx.lineWidth = 3; 
@@ -848,7 +848,7 @@
     }
     
     function drawBackground(ctx) { 
-        // Arkaplan gradyan03
+        // Arkaplan gradyanÂ0Â3
         const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
         gradient.addColorStop(0, '#86efac');
         gradient.addColorStop(0.5, '#78c078');
@@ -862,7 +862,7 @@
         ctx.ellipse(canvas.width / 2, canvas.height, canvas.width * 0.9, canvas.height * 0.5, 0, 0, Math.PI * 2); 
         ctx.fill();
         
-        // 0‡5i0Š4ekler ve detaylar
+        // Â0â€¡5iÂ0Å 4ekler ve detaylar
         for (let i = 0; i < 8; i++) {
             const x = Math.random() * canvas.width;
             const y = Math.random() * canvas.height;
@@ -873,7 +873,7 @@
         }
     }
 
-    // --- YARDIMCI HAREKET S02STEM02 (YEN02DEN YAZILDI) ---
+    // --- YARDIMCI HAREKET SÂ0Â2STEMÂ0Â2 (YENÂ0Â2DEN YAZILDI) ---
     function distance(pos1, pos2) {
         return Math.hypot(pos1.x - pos2.x, pos1.y - pos2.y);
     }
@@ -883,7 +883,7 @@
         if (dist < speed) {
             entity.pos.x = targetPos.x;
             entity.pos.y = targetPos.y;
-            return true; // Hedefe ula0”6t03
+            return true; // Hedefe ulaÂ0â€6tÂ0Â3
         }
         
         const angle = Math.atan2(targetPos.y - entity.pos.y, targetPos.x - entity.pos.x);
@@ -924,7 +924,7 @@
     function assignTask(helper) {
         const storagePos = gameState.locations.storageBox.pos;
         
-        // Temel kaynak toplama i0”60Š4ileri
+        // Temel kaynak toplama iÂ0â€6Â0Å 4ileri
         if (['milk', 'egg', 'wood', 'wheat'].includes(helper.type)) {
             const sourceTypeMap = { milk: 'cow', egg: 'chicken', wood: 'tree', wheat: 'wheat' };
             const source = findNearestAvailableSource(helper, sourceTypeMap[helper.type]);
@@ -938,7 +938,7 @@
             }
         }
         
-        // De0Ž6irmenci
+        // DeÂ0Å½6irmenci
         if (helper.type === 'miller') {
             const mill = gameState.locations.mill;
             if (mill.owned && !mill.processing && !mill.hasProduct && gameState.storage.wheat >= mill.level) {
@@ -949,7 +949,7 @@
             }
         }
         
-        // F03r03nc03
+        // FÂ0Â3rÂ0Â3ncÂ0Â3
         if (helper.type === 'baker') {
             const oven = gameState.locations.oven;
             if (oven.owned && !oven.processing && !oven.hasProduct && gameState.storage.flour >= oven.level) {
@@ -960,7 +960,7 @@
             }
         }
         
-        // Toplay03c03
+        // ToplayÂ0Â3cÂ0Â3
         if (helper.type === 'collector') {
             const readyMachines = Object.values(gameState.locations).filter(loc => 
                 (loc.type === 'mill' || loc.type === 'oven') && 
@@ -979,7 +979,7 @@
             }
         }
         
-        // Sat03c03
+        // SatÂ0Â3cÂ0Â3
         if (helper.type === 'seller') {
             const customers = [gameState.customer1, gameState.customer2].filter(c => 
                 c && gameState.storage[c.wants] > 0
@@ -1020,14 +1020,14 @@
                     helper.task = null;
                     helper.targetPos = null;
                     helper.targetSource = null;
-                    showMessage(`${helper.type} topland03!`, 'success');
+                    showMessage(`${helper.type} toplandÂ0Â3!`, 'success');
                     playSound('collect', 'E5');
                 }
                 break;
                 
             case 'process_mill':
                 if (!helper.hasItem) {
-                    // Bu0Ž6day al
+                    // BuÂ0Å½6day al
                     gameState.storage.wheat -= helper.targetMachine.level;
                     helper.hasItem = true;
                     helper.targetPos = helper.targetMachine.pos;
@@ -1037,14 +1037,14 @@
                 
             case 'deliver_to_mill':
                 if (helper.hasItem) {
-                    // De0Ž6irmene ver
+                    // DeÂ0Å½6irmene ver
                     helper.targetMachine.processing = true;
                     helper.targetMachine.timer = PROCESS_TIMES.flour;
                     helper.hasItem = false;
                     helper.task = null;
                     helper.targetPos = null;
                     helper.targetMachine = null;
-                    showMessage('Bu0Ž6day i0”6leniyor...', 'info');
+                    showMessage('BuÂ0Å½6day iÂ0â€6leniyor...', 'info');
                 }
                 break;
                 
@@ -1060,20 +1060,20 @@
                 
             case 'deliver_to_oven':
                 if (helper.hasItem) {
-                    // F03r03na ver
+                    // FÂ0Â3rÂ0Â3na ver
                     helper.targetMachine.processing = true;
                     helper.targetMachine.timer = PROCESS_TIMES.bread;
                     helper.hasItem = false;
                     helper.task = null;
                     helper.targetPos = null;
                     helper.targetMachine = null;
-                    showMessage('Ekmek pi0”6iyor...', 'info');
+                    showMessage('Ekmek piÂ0â€6iyor...', 'info');
                 }
                 break;
                 
             case 'collect_product':
                 if (!helper.hasItem) {
-                    // 0‰5r¨¹n¨¹ al
+                    // Â0â€°5rÂ¨Â¹nÂ¨Â¹ al
                     const product = helper.targetMachine.type === 'mill' ? 'flour' : 'bread';
                     helper.targetMachine.hasProduct = false;
                     helper.targetMachine.claimedBy = null;
@@ -1086,7 +1086,7 @@
                 
             case 'deliver_product':
                 if (helper.hasItem) {
-                    // 0‰5r¨¹n¨¹ depoya koy
+                    // Â0â€°5rÂ¨Â¹nÂ¨Â¹ depoya koy
                     gameState.storage[helper.productType] += helper.targetMachine.level;
                     helper.hasItem = false;
                     helper.task = null;
@@ -1100,7 +1100,7 @@
                 
             case 'sell':
                 if (!helper.hasItem) {
-                    // 0‰5r¨¹n¨¹ al
+                    // Â0â€°5rÂ¨Â¹nÂ¨Â¹ al
                     gameState.storage[helper.itemToSell]--;
                     helper.hasItem = true;
                     helper.targetPos = helper.targetCustomer.pos;
@@ -1110,13 +1110,13 @@
                 
             case 'deliver_to_customer':
                 if (helper.hasItem) {
-                    // M¨¹0”6teriye sat
+                    // MÂ¨Â¹Â0â€6teriye sat
                     gameState.player.money += ITEM_PRICES[helper.itemToSell];
                     helper.hasItem = false;
                     helper.task = null;
                     helper.targetPos = null;
                     
-                    // M¨¹0”6teriyi kald03r
+                    // MÂ¨Â¹Â0â€6teriyi kaldÂ0Â3r
                     if (helper.targetCustomer === gameState.customer1) {
                         gameState.customer1 = null;
                     } else {
@@ -1125,22 +1125,22 @@
                     
                     helper.targetCustomer = null;
                     helper.itemToSell = null;
-                    showMessage('Sat030”6 yap03ld03!', 'success');
+                    showMessage('SatÂ0Â3Â0â€6 yapÂ0Â3ldÂ0Â3!', 'success');
                     playSound('sale', 'C5');
                 }
                 break;
         }
     }
 
-    // --- RENDER FONKS02YONU ---
+    // --- RENDER FONKSÂ0Â2YONU ---
     function render() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBackground(ctx);
         
-        // 0‡5izilecek nesneleri topla ve s03rala
+        // Â0â€¡5izilecek nesneleri topla ve sÂ0Â3rala
         let objectsToDraw = [];
         
-        // Lokasyonlar03 ekle
+        // LokasyonlarÂ0Â3 ekle
         Object.values(gameState.locations).forEach(loc => {
             if (loc.owned) {
                 let drawFunc, indicator, angle;
@@ -1148,11 +1148,11 @@
                 switch(loc.type) {
                     case 'salesCounter': drawFunc = drawSalesCounter; break;
                     case 'storageBox': drawFunc = drawStorageBox; break;
-                    case 'cow': drawFunc = drawCow; indicator = '•0Ô5'; break;
-                    case 'chicken': drawFunc = drawChicken; indicator = '•0Ô4'; break;
-                    case 'wheat': drawFunc = drawWheatField; indicator = '”9¶0'; break;
+                    case 'cow': drawFunc = drawCow; indicator = 'â€¢0Ã”5'; break;
+                    case 'chicken': drawFunc = drawChicken; indicator = 'â€¢0Ã”4'; break;
+                    case 'wheat': drawFunc = drawWheatField; indicator = 'â€9Â¶0'; break;
                     case 'oven': drawFunc = drawOven; break;
-                    case 'tree': drawFunc = drawTree; indicator = '•0÷1'; break;
+                    case 'tree': drawFunc = drawTree; indicator = 'â€¢0Ã·1'; break;
                     case 'mill': drawFunc = drawMill; angle = gameState.millAngle; break;
                 }
                 
@@ -1168,7 +1168,7 @@
             }
         });
         
-        // Yard03mc03lar03 ekle
+        // YardÂ0Â3mcÂ0Â3larÂ0Â3 ekle
         gameState.helpers.forEach(helper => {
             objectsToDraw.push({
                 draw: drawHelper,
@@ -1184,7 +1184,7 @@
             y: gameState.player.pos.y
         });
         
-        // M¨¹0”6terileri ekle
+        // MÂ¨Â¹Â0â€6terileri ekle
         if (gameState.customer1) {
             objectsToDraw.push({
                 draw: drawCustomer,
@@ -1200,10 +1200,10 @@
             });
         }
         
-        // Y koordinat03na g0‹2re s03rala (derinlik ill¨¹zyonu)
+        // Y koordinatÂ0Â3na gÂ0â€¹2re sÂ0Â3rala (derinlik illÂ¨Â¹zyonu)
         objectsToDraw.sort((a, b) => a.y - b.y);
         
-        // 0‡5iz
+        // Â0â€¡5iz
         objectsToDraw.forEach(({ draw, obj, indicator, angle }) => {
             if (angle !== undefined) {
                 draw(ctx, obj.pos, angle);
@@ -1220,7 +1220,7 @@
             }
         });
         
-        // M¨¹0”6teri sipari0”6lerini g0‹2ster
+        // MÂ¨Â¹Â0â€6teri sipariÂ0â€6lerini gÂ0â€¹2ster
         if (gameState.customer1) {
             drawOrderBubble(ctx, gameState.customer1.pos, ITEM_EMOJIS[gameState.customer1.wants]);
         }
@@ -1228,15 +1228,15 @@
             drawOrderBubble(ctx, gameState.customer2.pos, ITEM_EMOJIS[gameState.customer2.wants]);
         }
         
-        // Makine durumlar03n03 g0‹2ster
+        // Makine durumlarÂ0Â3nÂ0Â3 gÂ0â€¹2ster
         const oven = gameState.locations.oven;
         if (oven.owned) {
             if (oven.hasProduct) {
                 ctx.font = '30px sans-serif';
-                ctx.fillText('”9¹2', oven.pos.x, oven.pos.y);
+                ctx.fillText('â€9Â¹2', oven.pos.x, oven.pos.y);
             } else if (oven.processing) {
                 ctx.font = '30px sans-serif';
-                ctx.fillText('7¬6„1‚5', oven.pos.x, oven.pos.y);
+                ctx.fillText('Â7Â¬6â€ž1â€š5', oven.pos.x, oven.pos.y);
             }
         }
         
@@ -1244,14 +1244,14 @@
         if (mill.owned) {
             if (mill.hasProduct) {
                 ctx.font = '30px sans-serif';
-                ctx.fillText('•0Õ1', mill.pos.x, mill.pos.y);
+                ctx.fillText('â€¢0Ã•1', mill.pos.x, mill.pos.y);
             } else if (mill.processing) {
                 ctx.font = '30px sans-serif';
-                ctx.fillText('7±5„1‚5', mill.pos.x, mill.pos.y);
+                ctx.fillText('Â7Â±5â€ž1â€š5', mill.pos.x, mill.pos.y);
             }
         }
         
-        // UI g¨¹ncelleme
+        // UI gÂ¨Â¹ncelleme
         updateUI();
     }
 
@@ -1264,7 +1264,7 @@
         flourEl.textContent = gameState.storage.flour;
     }
 
-    // --- OYUN G0‰5NCELLEMES02 ---
+    // --- OYUN GÂ0â€°5NCELLEMESÂ0Â2 ---
     function update() {
         // Oyuncu hareketi
         const speed = 4;
@@ -1273,10 +1273,10 @@
         if (keys.left.pressed && gameState.player.pos.x > 25) gameState.player.pos.x -= speed;
         if (keys.right.pressed && gameState.player.pos.x < canvas.width - 25) gameState.player.pos.x += speed;
         
-        // Etkile0”6im kontrol¨¹
+        // EtkileÂ0â€6im kontrolÂ¨Â¹
         checkInteraction();
         
-        // Cooldown g¨¹ncelleme
+        // Cooldown gÂ¨Â¹ncelleme
         Object.values(gameState.locations).forEach(loc => {
             if (loc.owned && loc.cooldown > 0) {
                 loc.cooldown--;
@@ -1286,24 +1286,24 @@
             }
         });
         
-        // De0Ž6irmen animasyonu
+        // DeÂ0Å½6irmen animasyonu
         gameState.millAngle += 0.02;
         
-        // M¨¹0”6teri spawn sistemi
+        // MÂ¨Â¹Â0â€6teri spawn sistemi
         spawnCustomers();
         
-        // M¨¹0”6teri sab03r sistemi
+        // MÂ¨Â¹Â0â€6teri sabÂ0Â3r sistemi
         updateCustomerPatience();
         
-        // Makine i0”6leme
+        // Makine iÂ0â€6leme
         updateMachineProcessing();
         
-        // Yard03mc03 g¨¹ncelleme
+        // YardÂ0Â3mcÂ0Â3 gÂ¨Â¹ncelleme
         gameState.helpers.forEach(updateHelper);
     }
 
     function spawnCustomers() {
-        // M¨¹0”6teri 1
+        // MÂ¨Â¹Â0â€6teri 1
         if (!gameState.customer1 && Math.random() < 0.008) {
             let possibleWants = ['milk', 'egg', 'wood', 'wheat'];
             if (gameState.locations.mill.owned) {
@@ -1320,7 +1320,7 @@
             };
         }
         
-        // M¨¹0”6teri 2
+        // MÂ¨Â¹Â0â€6teri 2
         if (gameState.locations.salesCounter2.owned && !gameState.customer2 && Math.random() < 0.006) {
             let possibleWants = ['milk', 'egg', 'wood', 'wheat'];
             if (gameState.locations.mill.owned) {
@@ -1343,7 +1343,7 @@
             gameState.customer1.patience--;
             if (gameState.customer1.patience <= 0) {
                 gameState.customer1 = null;
-                showMessage("M¨¹0”6teri sab03rs03zl03ktan gitti!", 'error');
+                showMessage("MÂ¨Â¹Â0â€6teri sabÂ0Â3rsÂ0Â3zlÂ0Â3ktan gitti!", 'error');
                 playSound('error', 'C3');
             }
         }
@@ -1352,33 +1352,33 @@
             gameState.customer2.patience--;
             if (gameState.customer2.patience <= 0) {
                 gameState.customer2 = null;
-                showMessage("M¨¹0”6teri sab03rs03zl03ktan gitti!", 'error');
+                showMessage("MÂ¨Â¹Â0â€6teri sabÂ0Â3rsÂ0Â3zlÂ0Â3ktan gitti!", 'error');
                 playSound('error', 'C3');
             }
         }
     }
 
     function updateMachineProcessing() {
-        // F03r03n
+        // FÂ0Â3rÂ0Â3n
         const oven = gameState.locations.oven;
         if (oven.owned && oven.processing) {
             oven.timer--;
             if (oven.timer <= 0) {
                 oven.processing = false;
                 oven.hasProduct = true;
-                showMessage('Ekmek haz03r!', 'success');
+                showMessage('Ekmek hazÂ0Â3r!', 'success');
                 playSound('collect', 'G5');
             }
         }
         
-        // De0Ž6irmen
+        // DeÂ0Å½6irmen
         const mill = gameState.locations.mill;
         if (mill.owned && mill.processing) {
             mill.timer--;
             if (mill.timer <= 0) {
                 mill.processing = false;
                 mill.hasProduct = true;
-                showMessage('Un haz03r!', 'success');
+                showMessage('Un hazÂ0Â3r!', 'success');
                 playSound('collect', 'G5');
             }
         }
@@ -1401,12 +1401,12 @@
                     loc.ready = false;
                     loc.cooldown = COOLDOWNS[itemType];
                     
-                    showMessage(`${loc.level} ${itemType} toplad03n!`, 'success');
+                    showMessage(`${loc.level} ${itemType} topladÂ0Â3n!`, 'success');
                     playSound('collect', 'E5');
                     interacted = true;
                 }
                 
-                // Makine etkile0”6imleri
+                // Makine etkileÂ0â€6imleri
                 if (loc.type === 'oven' || loc.type === 'mill') {
                     if (loc.hasProduct) {
                         const product = loc.type === 'oven' ? 'bread' : 'flour';
@@ -1421,7 +1421,7 @@
                             gameState.storage[input] -= loc.level;
                             loc.processing = true;
                             loc.timer = loc.type === 'oven' ? PROCESS_TIMES.bread : PROCESS_TIMES.flour;
-                            showMessage(`${input} i0”6leniyor...`, 'info');
+                            showMessage(`${input} iÂ0â€6leniyor...`, 'info');
                             interacted = true;
                         } else {
                             showMessage(`Yeterli ${input} yok!`, 'error');
@@ -1433,8 +1433,8 @@
             }
         });
         
-        // M¨¹0”6teri etkile0”6imi
-        // M¨¹0”6teri etkile0”6imi
+        // MÂ¨Â¹Â0â€6teri etkileÂ0â€6imi
+        // MÂ¨Â¹Â0â€6teri etkileÂ0â€6imi
         [gameState.customer1, gameState.customer2].forEach(customer => {
             if (customer && distance(gameState.player.pos, customer.pos) < 60) {
                 const wants = customer.wants;
@@ -1448,7 +1448,7 @@
                         gameState.customer2 = null;
                     }
                     
-                    showMessage(`${ITEM_PRICES[wants]}”9Û0 kazand03n!`, 'success');
+                    showMessage(`${ITEM_PRICES[wants]}â€9Ã›0 kazandÂ0Â3n!`, 'success');
                     playSound('sale', 'C5');
                     interacted = true;
                 } else {
@@ -1464,7 +1464,7 @@
         }
     }
 
-    // --- MODAL VE UI FONKS02YONLARI ---
+    // --- MODAL VE UI FONKSÂ0Â2YONLARI ---
     function openModal(title, content) {
         modalTitle.textContent = title;
         modalBody.innerHTML = content;
@@ -1479,64 +1479,64 @@
     }
 
     function setupModals() {
-        // Yard03mc03 kiralama
+        // YardÂ0Â3mcÂ0Â3 kiralama
         document.getElementById('hire-helper-btn').addEventListener('click', () => {
             const content = `
                 <div class="space-y-2">
                     <button class="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded-lg transition-colors" onclick="hireHelper('milk')">
-                        •0Ô5 S¨¹t0Š4¨¹ Robot - ${COSTS.helpers.milk}”9Û0
-                        <div class="text-sm opacity-75">Otomatik s¨¹t toplar</div>
+                        â€¢0Ã”5 SÂ¨Â¹tÂ0Å 4Â¨Â¹ Robot - ${COSTS.helpers.milk}â€9Ã›0
+                        <div class="text-sm opacity-75">Otomatik sÂ¨Â¹t toplar</div>
                     </button>
                     <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-black p-3 rounded-lg transition-colors" onclick="hireHelper('egg')">
-                        •0Ô4 Yumurtac03 Robot - ${COSTS.helpers.egg}”9Û0
+                        â€¢0Ã”4 YumurtacÂ0Â3 Robot - ${COSTS.helpers.egg}â€9Ã›0
                         <div class="text-sm opacity-75">Otomatik yumurta toplar</div>
                     </button>
                     <button class="w-full bg-green-600 hover:bg-green-700 p-3 rounded-lg transition-colors" onclick="hireHelper('wood')">
-                        •0÷1 Oduncu Robot - ${COSTS.helpers.wood}”9Û0
+                        â€¢0Ã·1 Oduncu Robot - ${COSTS.helpers.wood}â€9Ã›0
                         <div class="text-sm opacity-75">Otomatik odun toplar</div>
                     </button>
                     <button class="w-full bg-yellow-600 hover:bg-yellow-700 p-3 rounded-lg transition-colors" onclick="hireHelper('wheat')">
-                        ”9¶0 0‡5ift0Š4i Robot - ${COSTS.helpers.wheat || 200}”9Û0
-                        <div class="text-sm opacity-75">Otomatik bu0Ž6day toplar</div>
+                        â€9Â¶0 Â0â€¡5iftÂ0Å 4i Robot - ${COSTS.helpers.wheat || 200}â€9Ã›0
+                        <div class="text-sm opacity-75">Otomatik buÂ0Å½6day toplar</div>
                     </button>
                     <button class="w-full bg-amber-500 hover:bg-amber-600 p-3 rounded-lg transition-colors" onclick="hireHelper('miller')">
-                        7±5„1‚5 De0Ž6irmenci Robot - ${COSTS.helpers.miller}”9Û0
-                        <div class="text-sm opacity-75">Bu0Ž6day03 una 0Š4evirir</div>
+                        Â7Â±5â€ž1â€š5 DeÂ0Å½6irmenci Robot - ${COSTS.helpers.miller}â€9Ã›0
+                        <div class="text-sm opacity-75">BuÂ0Å½6dayÂ0Â3 una Â0Å 4evirir</div>
                     </button>
                     <button class="w-full bg-orange-500 hover:bg-orange-600 p-3 rounded-lg transition-colors" onclick="hireHelper('baker')">
-                        ”9¹2 F03r03nc03 Robot - ${COSTS.helpers.baker}”9Û0
-                        <div class="text-sm opacity-75">Unu ekme0Ž6e 0Š4evirir</div>
+                        â€9Â¹2 FÂ0Â3rÂ0Â3ncÂ0Â3 Robot - ${COSTS.helpers.baker}â€9Ã›0
+                        <div class="text-sm opacity-75">Unu ekmeÂ0Å½6e Â0Å 4evirir</div>
                     </button>
                     <button class="w-full bg-pink-500 hover:bg-pink-600 p-3 rounded-lg transition-colors" onclick="hireHelper('collector')">
-                        •0Í6 Toplay03c03 Robot - ${COSTS.helpers.collector}”9Û0
-                        <div class="text-sm opacity-75">020”6lenmi0”6 ¨¹r¨¹nleri toplar</div>
+                        â€¢0Ã6 ToplayÂ0Â3cÂ0Â3 Robot - ${COSTS.helpers.collector}â€9Ã›0
+                        <div class="text-sm opacity-75">Â0Â2Â0â€6lenmiÂ0â€6 Â¨Â¹rÂ¨Â¹nleri toplar</div>
                     </button>
                     <button class="w-full bg-emerald-500 hover:bg-emerald-600 p-3 rounded-lg transition-colors" onclick="hireHelper('seller')">
-                        ”9Û0 Sat03c03 Robot - ${COSTS.helpers.seller}”9Û0
-                        <div class="text-sm opacity-75">M¨¹0”6terilere otomatik sat030”6 yapar</div>
+                        â€9Ã›0 SatÂ0Â3cÂ0Â3 Robot - ${COSTS.helpers.seller}â€9Ã›0
+                        <div class="text-sm opacity-75">MÂ¨Â¹Â0â€6terilere otomatik satÂ0Â3Â0â€6 yapar</div>
                     </button>
                 </div>
                 <div class="mt-4 p-3 bg-blue-900/50 rounded-lg text-sm">
-                    <p class="text-blue-200">”9Ù5 <strong>02pucu:</strong> Robotlar otomatik 0Š4al030”603r ve verimlili0Ž6i art03r03r!</p>
+                    <p class="text-blue-200">â€9Ã™5 <strong>Â0Â2pucu:</strong> Robotlar otomatik Â0Å 4alÂ0Â3Â0â€6Â0Â3r ve verimliliÂ0Å½6i artÂ0Â3rÂ0Â3r!</p>
                 </div>
             `;
-            openModal('•0Í6 Robot 020”60Š4i Kirala', content);
+            openModal('â€¢0Ã6 Robot Â0Â2Â0â€6Â0Å 4i Kirala', content);
         });
 
         // Pazar yeri
         document.getElementById('market-btn').addEventListener('click', () => {
             let content = '<div class="space-y-2">';
             
-            // Y¨¹kseltmeler
+            // YÂ¨Â¹kseltmeler
             const upgradables = {
-                cow: { name: '”9É8 02nek Ah03r03', desc: 'Daha fazla s¨¹t ¨¹retir' },
-                chicken: { name: '”9Ë4 K¨¹mes', desc: 'Daha fazla yumurta ¨¹retir' },
-                wheat: { name: '”9¶0 Tarla', desc: 'Daha fazla bu0Ž6day ¨¹retir' },
-                oven: { name: '”9æ7 F03r03n', desc: 'Daha fazla ekmek pi0”6irir' },
-                tree: { name: '”9´9 Orman', desc: 'Daha fazla odun ¨¹retir' }
+                cow: { name: 'â€9Ã‰8 Â0Â2nek AhÂ0Â3rÂ0Â3', desc: 'Daha fazla sÂ¨Â¹t Â¨Â¹retir' },
+                chicken: { name: 'â€9Ã‹4 KÂ¨Â¹mes', desc: 'Daha fazla yumurta Â¨Â¹retir' },
+                wheat: { name: 'â€9Â¶0 Tarla', desc: 'Daha fazla buÂ0Å½6day Â¨Â¹retir' },
+                oven: { name: 'â€9Ã¦7 FÂ0Â3rÂ0Â3n', desc: 'Daha fazla ekmek piÂ0â€6irir' },
+                tree: { name: 'â€9Â´9 Orman', desc: 'Daha fazla odun Â¨Â¹retir' }
             };
             
-            content += '<h3 class="text-lg font-bold text-yellow-300 mb-3">”9Ý4 Y¨¹kseltmeler</h3>';
+            content += '<h3 class="text-lg font-bold text-yellow-300 mb-3">â€9Ã4 YÂ¨Â¹kseltmeler</h3>';
             
             for (const [key, info] of Object.entries(upgradables)) {
                 const loc = gameState.locations[key];
@@ -1555,8 +1555,8 @@
                                     <div class="text-sm opacity-75">${info.desc}</div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="font-bold">Lv.${loc.level} ¡ú ${loc.level + 1}</div>
-                                    <div class="text-sm">${cost}”9Û0</div>
+                                    <div class="font-bold">Lv.${loc.level} Â¡Ãº ${loc.level + 1}</div>
+                                    <div class="text-sm">${cost}â€9Ã›0</div>
                                 </div>
                             </div>
                         </button>
@@ -1565,7 +1565,7 @@
             }
             
             content += '<hr class="my-4 border-slate-600">';
-            content += '<h3 class="text-lg font-bold text-yellow-300 mb-3">”9Å3„1‚5 Yeni Binalar</h3>';
+            content += '<h3 class="text-lg font-bold text-yellow-300 mb-3">â€9Ã…3â€ž1â€š5 Yeni Binalar</h3>';
             
             // Yeni binalar
             if (!gameState.locations.mill.owned) {
@@ -1578,10 +1578,10 @@
                             ${!canAfford ? 'disabled' : ''}>
                         <div class="flex justify-between items-center">
                             <div>
-                                <div class="font-semibold">7±5„1‚5 De0Ž6irmen</div>
-                                <div class="text-sm opacity-75">Bu0Ž6day03 una 0Š4evirir</div>
+                                <div class="font-semibold">Â7Â±5â€ž1â€š5 DeÂ0Å½6irmen</div>
+                                <div class="text-sm opacity-75">BuÂ0Å½6dayÂ0Â3 una Â0Å 4evirir</div>
                             </div>
-                            <div class="font-bold">${COSTS.buildings.mill}”9Û0</div>
+                            <div class="font-bold">${COSTS.buildings.mill}â€9Ã›0</div>
                         </div>
                     </button>
                 `;
@@ -1597,10 +1597,10 @@
                             ${!canAfford ? 'disabled' : ''}>
                         <div class="flex justify-between items-center">
                             <div>
-                                <div class="font-semibold">•0“6 2. Sat030”6 Tezgah03</div>
-                                <div class="text-sm opacity-75">Daha fazla m¨¹0”6teri</div>
+                                <div class="font-semibold">â€¢0â€œ6 2. SatÂ0Â3Â0â€6 TezgahÂ0Â3</div>
+                                <div class="text-sm opacity-75">Daha fazla mÂ¨Â¹Â0â€6teri</div>
                             </div>
-                            <div class="font-bold">${COSTS.buildings.marketStall}”9Û0</div>
+                            <div class="font-bold">${COSTS.buildings.marketStall}â€9Ã›0</div>
                         </div>
                     </button>
                 `;
@@ -1609,11 +1609,11 @@
             content += '</div>';
             content += `
                 <div class="mt-4 p-3 bg-green-900/50 rounded-lg text-sm">
-                    <p class="text-green-200">”9Ù5 <strong>02pucu:</strong> Y¨¹kseltmeler ¨¹retimi art03r03r ve daha fazla kazan0Š4 sa0Ž6lar!</p>
+                    <p class="text-green-200">â€9Ã™5 <strong>Â0Â2pucu:</strong> YÂ¨Â¹kseltmeler Â¨Â¹retimi artÂ0Â3rÂ0Â3r ve daha fazla kazanÂ0Å 4 saÂ0Å½6lar!</p>
                 </div>
             `;
             
-            openModal('•0“6 Pazar Yeri', content);
+            openModal('â€¢0â€œ6 Pazar Yeri', content);
         });
 
         // Bilgi butonu
@@ -1631,78 +1631,78 @@
             const content = `
                 <div class="text-sm space-y-3">
                     <div class="bg-slate-700 p-3 rounded-lg">
-                        <h3 class="font-bold text-yellow-300 mb-2">”9Ý6 02statistikler</h3>
+                        <h3 class="font-bold text-yellow-300 mb-2">â€9Ã6 Â0Â2statistikler</h3>
                         <div class="grid grid-cols-2 gap-2 text-xs">
-                            <div>”9Û0 Para: ${gameState.player.money}</div>
-                            <div>•0Í6 Robot: ${helperCount}</div>
-                            <div>”9×6 Depo: ${totalValue}”9Û0</div>
-                            <div>”9Ã6 Toplam: ${totalAssets}”9Û0</div>
-                            <div>7²3 0‰5retim: ${productivity}</div>
-                            <div>”9Ý4 Verimlilik: %${Math.min(100, productivity * 10)}</div>
+                            <div>â€9Ã›0 Para: ${gameState.player.money}</div>
+                            <div>â€¢0Ã6 Robot: ${helperCount}</div>
+                            <div>â€9Ã—6 Depo: ${totalValue}â€9Ã›0</div>
+                            <div>â€9Ãƒ6 Toplam: ${totalAssets}â€9Ã›0</div>
+                            <div>Â7Â²3 Â0â€°5retim: ${productivity}</div>
+                            <div>â€9Ã4 Verimlilik: %${Math.min(100, productivity * 10)}</div>
                         </div>
                     </div>
                     
                     <div class="bg-slate-700 p-3 rounded-lg">
-                        <h3 class="font-bold text-yellow-300 mb-2">”9Á2 Kontroller</h3>
+                        <h3 class="font-bold text-yellow-300 mb-2">â€9Ã2 Kontroller</h3>
                         <div class="text-xs space-y-1">
-                            <p>6¦1 <strong>Hareket:</strong> Ok tu0”6lar03 veya WASD</p>
-                            <p>6¦1 <strong>Toplama:</strong> Hayvanlara yakla0”603n</p>
-                            <p>6¦1 <strong>Sat030”6:</strong> M¨¹0”6terilere yakla0”603n</p>
-                            <p>6¦1 <strong>020”6leme:</strong> F03r03n/De0Ž6irmene yakla0”603n</p>
-                            <p>6¦1 <strong>Robot:</strong> Otomatik 0Š4al030”603r</p>
+                            <p>Â6Â¦1 <strong>Hareket:</strong> Ok tuÂ0â€6larÂ0Â3 veya WASD</p>
+                            <p>Â6Â¦1 <strong>Toplama:</strong> Hayvanlara yaklaÂ0â€6Â0Â3n</p>
+                            <p>Â6Â¦1 <strong>SatÂ0Â3Â0â€6:</strong> MÂ¨Â¹Â0â€6terilere yaklaÂ0â€6Â0Â3n</p>
+                            <p>Â6Â¦1 <strong>Â0Â2Â0â€6leme:</strong> FÂ0Â3rÂ0Â3n/DeÂ0Å½6irmene yaklaÂ0â€6Â0Â3n</p>
+                            <p>Â6Â¦1 <strong>Robot:</strong> Otomatik Â0Å 4alÂ0Â3Â0â€6Â0Â3r</p>
                         </div>
                     </div>
                     
                     <div class="bg-slate-700 p-3 rounded-lg">
-                        <h3 class="font-bold text-yellow-300 mb-2">”9Û0 Fiyat Listesi</h3>
+                        <h3 class="font-bold text-yellow-300 mb-2">â€9Ã›0 Fiyat Listesi</h3>
                         <div class="grid grid-cols-2 gap-1 text-xs">
-                            <div>•0Ô5 S¨¹t: ${ITEM_PRICES.milk}”9Û0</div>
-                            <div>•0Ô4 Yumurta: ${ITEM_PRICES.egg}”9Û0</div>
-                            <div>•0÷1 Odun: ${ITEM_PRICES.wood}”9Û0</div>
-                            <div>”9¶0 Bu0Ž6day: ${ITEM_PRICES.wheat}”9Û0</div>
-                            <div>•0Õ1 Un: ${ITEM_PRICES.flour}”9Û0</div>
-                            <div>”9¹2 Ekmek: ${ITEM_PRICES.bread}”9Û0</div>
+                            <div>â€¢0Ã”5 SÂ¨Â¹t: ${ITEM_PRICES.milk}â€9Ã›0</div>
+                            <div>â€¢0Ã”4 Yumurta: ${ITEM_PRICES.egg}â€9Ã›0</div>
+                            <div>â€¢0Ã·1 Odun: ${ITEM_PRICES.wood}â€9Ã›0</div>
+                            <div>â€9Â¶0 BuÂ0Å½6day: ${ITEM_PRICES.wheat}â€9Ã›0</div>
+                            <div>â€¢0Ã•1 Un: ${ITEM_PRICES.flour}â€9Ã›0</div>
+                            <div>â€9Â¹2 Ekmek: ${ITEM_PRICES.bread}â€9Ã›0</div>
                         </div>
                     </div>
                     
                     <div class="bg-slate-700 p-3 rounded-lg">
-                        <h3 class="font-bold text-yellow-300 mb-2">”9Á3 Strateji 02pu0Š4lar03</h3>
+                        <h3 class="font-bold text-yellow-300 mb-2">â€9Ã3 Strateji Â0Â2puÂ0Å 4larÂ0Â3</h3>
                         <div class="text-xs space-y-1">
-                            <p>6¦1 0‰0nce temel robotlar03 kiralay03n</p>
-                            <p>6¦1 De0Ž6irmen ve f03r03n a0Š403n</p>
-                            <p>6¦1 Ekmek en karl03 ¨¹r¨¹nd¨¹r</p>
-                            <p>6¦1 Y¨¹kseltmeler verimlilik art03r03r</p>
-                            <p>6¦1 Birden fazla tezgah a0Š403n</p>
+                            <p>Â6Â¦1 Â0â€°0nce temel robotlarÂ0Â3 kiralayÂ0Â3n</p>
+                            <p>Â6Â¦1 DeÂ0Å½6irmen ve fÂ0Â3rÂ0Â3n aÂ0Å 4Â0Â3n</p>
+                            <p>Â6Â¦1 Ekmek en karlÂ0Â3 Â¨Â¹rÂ¨Â¹ndÂ¨Â¹r</p>
+                            <p>Â6Â¦1 YÂ¨Â¹kseltmeler verimlilik artÂ0Â3rÂ0Â3r</p>
+                            <p>Â6Â¦1 Birden fazla tezgah aÂ0Å 4Â0Â3n</p>
                         </div>
                     </div>
                     
                     <div class="bg-blue-900/50 p-3 rounded-lg">
-                        <h3 class="font-bold text-blue-300 mb-2">•0‹4 Hedefler</h3>
+                        <h3 class="font-bold text-blue-300 mb-2">â€¢0â€¹4 Hedefler</h3>
                         <div class="text-xs space-y-1">
-                            ${totalAssets < 5000 ? '<p>”9Á3 5,000”9Û0 biriktirin</p>' : ''}
-                            ${helperCount < 5 ? '<p>•0Í6 5 robot kiralay03n</p>' : ''}
-                            ${!gameState.locations.mill.owned ? '<p>7±5„1‚5 De0Ž6irmen in0”6a edin</p>' : ''}
-                            ${!gameState.locations.salesCounter2.owned ? '<p>•0“6 2. tezgah a0Š403n</p>' : ''}
-                            ${productivity < 20 ? '<p>”9Ý4 Binalar03n03z03 y¨¹kseltin</p>' : ''}
-                            ${totalAssets >= 10000 ? '<p>”9Ã6 0‡5iftlik 02mparatoru oldunuz!</p>' : ''}
+                            ${totalAssets < 5000 ? '<p>â€9Ã3 5,000â€9Ã›0 biriktirin</p>' : ''}
+                            ${helperCount < 5 ? '<p>â€¢0Ã6 5 robot kiralayÂ0Â3n</p>' : ''}
+                            ${!gameState.locations.mill.owned ? '<p>Â7Â±5â€ž1â€š5 DeÂ0Å½6irmen inÂ0â€6a edin</p>' : ''}
+                            ${!gameState.locations.salesCounter2.owned ? '<p>â€¢0â€œ6 2. tezgah aÂ0Å 4Â0Â3n</p>' : ''}
+                            ${productivity < 20 ? '<p>â€9Ã4 BinalarÂ0Â3nÂ0Â3zÂ0Â3 yÂ¨Â¹kseltin</p>' : ''}
+                            ${totalAssets >= 10000 ? '<p>â€9Ãƒ6 Â0â€¡5iftlik Â0Â2mparatoru oldunuz!</p>' : ''}
                         </div>
                     </div>
                 </div>
             `;
-            openModal('6À7„1‚5 Oyun Bilgileri', content);
+            openModal('Â6Ã€7â€ž1â€š5 Oyun Bilgileri', content);
         });
 
         // Modal kapatma
         document.getElementById('modal-close-btn').addEventListener('click', closeModal);
         
-        // Modal d030”603na t03klama ile kapatma
+        // Modal dÂ0Â3Â0â€6Â0Â3na tÂ0Â3klama ile kapatma
         modalBackdrop.addEventListener('click', (e) => {
             if (e.target === modalBackdrop) {
                 closeModal();
             }
         });
 
-        // ESC tu0”6u ile kapatma
+        // ESC tuÂ0â€6u ile kapatma
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !modalBackdrop.classList.contains('invisible')) {
                 closeModal();
@@ -1710,7 +1710,7 @@
         });
     }
 
-    // Global fonksiyonlar (modal butonlar03 i0Š4in)
+    // Global fonksiyonlar (modal butonlarÂ0Â3 iÂ0Å 4in)
     window.hireHelper = function(type) {
         const cost = COSTS.helpers[type];
         if (gameState.player.money >= cost) {
@@ -1736,24 +1736,24 @@
             gameState.helpers.push(newHelper);
             
             const helperNames = {
-                milk: 'S¨¹t0Š4¨¹ Robot',
-                egg: 'Yumurtac03 Robot', 
+                milk: 'SÂ¨Â¹tÂ0Å 4Â¨Â¹ Robot',
+                egg: 'YumurtacÂ0Â3 Robot', 
                 wood: 'Oduncu Robot',
-                wheat: '0‡5ift0Š4i Robot',
-                miller: 'De0Ž6irmenci Robot',
-                baker: 'F03r03nc03 Robot',
-                collector: 'Toplay03c03 Robot',
-                seller: 'Sat03c03 Robot'
+                wheat: 'Â0â€¡5iftÂ0Å 4i Robot',
+                miller: 'DeÂ0Å½6irmenci Robot',
+                baker: 'FÂ0Â3rÂ0Â3ncÂ0Â3 Robot',
+                collector: 'ToplayÂ0Â3cÂ0Â3 Robot',
+                seller: 'SatÂ0Â3cÂ0Â3 Robot'
             };
             
-            showMessage(`${helperNames[type]} kiraland03! •0Í6`, 'success');
+            showMessage(`${helperNames[type]} kiralandÂ0Â3! â€¢0Ã6`, 'success');
             playSound('sale', 'A4');
             closeModal();
             
-            // Ba0”6ar03 efekti
+            // BaÂ0â€6arÂ0Â3 efekti
             createSuccessParticles(gameState.locations.storageBox.pos);
         } else {
-            showMessage('Yeterli para yok! ”9Û8', 'error');
+            showMessage('Yeterli para yok! â€9Ã›8', 'error');
             playSound('error', 'C3');
         }
     };
@@ -1767,21 +1767,21 @@
             loc.level++;
             
             const names = {
-                cow: '02nek Ah03r03',
-                chicken: 'K¨¹mes', 
+                cow: 'Â0Â2nek AhÂ0Â3rÂ0Â3',
+                chicken: 'KÂ¨Â¹mes', 
                 wheat: 'Tarla',
-                oven: 'F03r03n',
+                oven: 'FÂ0Â3rÂ0Â3n',
                 tree: 'Orman'
             };
             
-            showMessage(`${names[key]} seviye ${loc.level}'e y¨¹kseltildi! 8¤8„1‚5`, 'success');
+            showMessage(`${names[key]} seviye ${loc.level}'e yÂ¨Â¹kseltildi! Â8Â¤8â€ž1â€š5`, 'success');
             playSound('sale', 'G4');
             closeModal();
             
-            // Ba0”6ar03 efekti
+            // BaÂ0â€6arÂ0Â3 efekti
             createSuccessParticles(loc.pos);
         } else {
-            showMessage('Yeterli para yok! ”9Û8', 'error');
+            showMessage('Yeterli para yok! â€9Ã›8', 'error');
             playSound('error', 'C3');
         }
     };
@@ -1794,23 +1794,23 @@
             
             if (key === 'mill') {
                 gameState.locations.mill.owned = true;
-                showMessage('De0Ž6irmen in0”6a edildi! 7±5„1‚5', 'success');
+                showMessage('DeÂ0Å½6irmen inÂ0â€6a edildi! Â7Â±5â€ž1â€š5', 'success');
                 createSuccessParticles(gameState.locations.mill.pos);
             } else if (key === 'salesCounter2') {
                 gameState.locations.salesCounter2.owned = true;
-                showMessage('2. Sat030”6 tezgah03 a0Š403ld03! •0“6', 'success');
+                showMessage('2. SatÂ0Â3Â0â€6 tezgahÂ0Â3 aÂ0Å 4Â0Â3ldÂ0Â3! â€¢0â€œ6', 'success');
                 createSuccessParticles(gameState.locations.salesCounter2.pos);
             }
             
             playSound('sale', 'G4');
             closeModal();
         } else {
-            showMessage('Yeterli para yok! ”9Û8', 'error');
+            showMessage('Yeterli para yok! â€9Ã›8', 'error');
             playSound('error', 'C3');
         }
     };
 
-    // Ba0”6ar03 partik¨¹lleri
+    // BaÂ0â€6arÂ0Â3 partikÂ¨Â¹lleri
     function createSuccessParticles(pos) {
         if (!gameState.particles) gameState.particles = [];
         
@@ -1827,20 +1827,20 @@
         }
     }
 
-    // Partik¨¹l g¨¹ncelleme
+    // PartikÂ¨Â¹l gÂ¨Â¹ncelleme
     function updateParticles() {
         if (!gameState.particles) return;
         
         gameState.particles = gameState.particles.filter(p => {
             p.x += p.vx;
             p.y += p.vy;
-            p.vy += 0.2; // Yer 0Š4ekimi
+            p.vy += 0.2; // Yer Â0Å 4ekimi
             p.life--;
             return p.life > 0;
         });
     }
 
-    // Partik¨¹l 0Š4izimi
+    // PartikÂ¨Â¹l Â0Å 4izimi
     function drawParticles(ctx) {
         if (!gameState.particles) return;
         
@@ -1853,7 +1853,7 @@
         });
     }
 
-    // Mesaj g0‹2sterme (geli0”6tirilmi0”6)
+    // Mesaj gÂ0â€¹2sterme (geliÂ0â€6tirilmiÂ0â€6)
     let messageTimer;
     function showMessage(text, type = 'info', duration = 3000) {
         clearTimeout(messageTimer);
@@ -1900,7 +1900,7 @@
             if (saveData) {
                 const data = JSON.parse(saveData);
                 
-                // Oyuncu ve depo bilgilerini y¨¹kle
+                // Oyuncu ve depo bilgilerini yÂ¨Â¹kle
                 if (data.player) gameState.player = { ...gameState.player, ...data.player };
                 if (data.storage) gameState.storage = { ...gameState.storage, ...data.storage };
                 if (data.locations) {
@@ -1911,7 +1911,7 @@
                     });
                 }
                 
-                // Robotlar03 y¨¹kle
+                // RobotlarÂ0Â3 yÂ¨Â¹kle
                 if (data.helpers && Array.isArray(data.helpers)) {
                     gameState.helpers = data.helpers.map(h => ({
                         ...h,
@@ -1926,12 +1926,12 @@
                     }));
                 }
                 
-                showMessage('Oyun y¨¹klendi! ”9Ü4', 'success');
+                showMessage('Oyun yÂ¨Â¹klendi! â€9Ãœ4', 'success');
                 return true;
             }
         } catch (e) {
-            console.error('Oyun y¨¹klenirken hata:', e);
-            showMessage('Kay03t dosyas03 bozuk! •07', 'error');
+            console.error('Oyun yÂ¨Â¹klenirken hata:', e);
+            showMessage('KayÂ0Â3t dosyasÂ0Â3 bozuk! â€¢0Â7', 'error');
         }
         return false;
     }
@@ -1943,7 +1943,7 @@
         }
     }, 30000); // Her 30 saniyede kaydet
 
-    // Sayfa kapat03l03rken kaydet
+    // Sayfa kapatÂ0Â3lÂ0Â3rken kaydet
     window.addEventListener('beforeunload', () => {
         if (gameState.player) {
             saveGame();
